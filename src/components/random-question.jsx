@@ -4,18 +4,21 @@ import {
   DialogContent,
   DialogFooter,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 
 export function RandomQuestion({ items }) {
-  const [id, setID] = useState(Math.floor(Math.random() * items.length));
+  const [id, setID] = useState(0);
+
   const handleClick = () => {
     setID(Math.floor(Math.random() * items.length));
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Random Question</Button>
+        <Button onClick={handleClick}>Random Question</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">
         <div className="flex min-h-[320px] flex-col gap-4 py-8">
@@ -24,6 +27,9 @@ export function RandomQuestion({ items }) {
         </div>
         <DialogFooter>
           <Button onClick={handleClick}>Another Question</Button>
+          <DialogClose asChild>
+            <Button variant="secondary">Close</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
