@@ -1,29 +1,23 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
-const TitleCard = ({ title, description }) => {
+const TitleCard = () => {
   return (
-    <HoverCard>
-      <HoverCardTrigger asChild>
-        <h1 className="outline-primary rounded-md px-8 py-12 text-3xl font-bold outline hover:outline-4 sm:text-4xl">
-          {title}
-        </h1>
-      </HoverCardTrigger>
-      <HoverCardContent className="w-80">
-        <div className="flex justify-between space-x-4">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>ME</AvatarFallback>
-          </Avatar>
-          <p>{description}</p>
-        </div>
-      </HoverCardContent>
-    </HoverCard>
+    <Card className="w-full max-w-3xl">
+      <CardHeader>
+        <CardTitle className="text-center text-2xl sm:text-3xl md:text-4xl">
+          Interview Questions and Answers
+        </CardTitle>
+        <CardDescription className="text-center sm:text-lg">
+          That's a really interesting question and I wish I knew the answer. I
+          don't. I can only guess. In my opinion, I think...
+        </CardDescription>
+      </CardHeader>
+    </Card>
   );
 };
 
