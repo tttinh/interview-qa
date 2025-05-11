@@ -227,7 +227,7 @@ projects.`,
   },
   {
     question: `Can you describe a situation where you had to persuade a team to
-adopt your idea.`,
+adopt your idea?`,
     answer: `In a previous role, I proposed a new project
 management software to improve efficiency. To persuade
 the team, I conducted research to highlight the benefits,
@@ -310,7 +310,7 @@ positive work environment.`,
   },
   {
     question: `Can you describe a situation where you had to handle confidential
-information.`,
+information?`,
     answer: `In my previous role, I was entrusted with
 confidential client data. I ensured its security by following
 strict protocols, limiting access to authorized personnel,
