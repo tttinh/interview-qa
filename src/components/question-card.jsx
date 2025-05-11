@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import QuestionList from '@/components/question-list';
+import QuestionLoop from '@/components/question-loop';
 
 const tabs = [
   {
@@ -11,7 +12,7 @@ const tabs = [
   {
     id: 'loop',
     label: 'Loop',
-    component: <QuestionList />,
+    component: <QuestionLoop />,
   },
   {
     id: 'shuffle',
@@ -21,9 +22,9 @@ const tabs = [
 ];
 const QuestionCard = () => {
   return (
-    <Card>
+    <Card className="w-full max-w-5xl">
       <CardContent>
-        <Tabs defaultValue={tabs[0].id} className="w-full max-w-3xl">
+        <Tabs defaultValue={tabs[0].id}>
           <TabsList className="flex w-full">
             {tabs.map((tab, index) => (
               <TabsTrigger key={index} value={tab.id}>

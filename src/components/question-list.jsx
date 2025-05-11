@@ -4,13 +4,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { cn } from '@/lib/utils';
 import { questions } from '@/assets/data';
 
-const QuestionList = ({ className }) => {
+const QuestionList = () => {
   return (
     <>
-      <Accordion type="single" collapsible className={cn('w-full', className)}>
+      <Accordion type="single" collapsible className="w-full">
         {questions.map((item, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
             <AccordionTrigger className="cursor-pointer text-lg sm:text-xl">
