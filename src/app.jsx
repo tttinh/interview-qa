@@ -4,6 +4,7 @@ import { ModeToggle } from '@/components/mode-toggle';
 import QuestionButton from '@/components/question-button';
 import QuestionCard from '@/components/question-card';
 import TitleCard from './components/title-card';
+import QuestionCarousel from './components/question-carousel';
 
 const App = () => {
   return (
@@ -19,7 +20,8 @@ const App = () => {
             title="Interview Questions and Answers"
             description="That's a really interesting question and I wish I knew the answer. I don't. I can only guess. In my opinion, I think..."
           />
-          <QuestionCard questions={questions} />
+          <QuestionCard className="hidden md:block" questions={questions} />
+          <QuestionCarousel className="md:hidden" questions={questions} />
         </section>
       </main>
     </ThemeProvider>
