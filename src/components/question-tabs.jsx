@@ -1,3 +1,4 @@
+import { List, Repeat, Shuffle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import QuestionList from '@/components/question-list';
@@ -7,20 +8,23 @@ const tabs = [
   {
     id: 'all',
     label: 'All',
+    icon: <List />,
     component: <QuestionList />,
   },
   {
     id: 'loop',
     label: 'Loop',
+    icon: <Repeat />,
     component: <QuestionLoop />,
   },
   {
     id: 'shuffle',
     label: 'Shuffle',
+    icon: <Shuffle />,
     component: <QuestionList />,
   },
 ];
-const QuestionCard = () => {
+const QuestionTabs = () => {
   return (
     <Card className="w-full max-w-5xl">
       <CardContent>
@@ -29,6 +33,7 @@ const QuestionCard = () => {
             {tabs.map((tab, index) => (
               <TabsTrigger key={index} value={tab.id}>
                 {tab.label}
+                {tab.icon}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -44,4 +49,4 @@ const QuestionCard = () => {
   );
 };
 
-export default QuestionCard;
+export default QuestionTabs;
