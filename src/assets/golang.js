@@ -1,714 +1,122 @@
-const golang = [
+export const golang = [
   {
-    question: `Would you please tell me about yourself?`,
-    answer: `Certainly, I'd be happy to. I hold a Bachelor's
-degree in Computer Science and have spent the last six
-years working in software development. I've had the
-opportunity to work on various projects, from developing
-mobile applications to leading a team of developers in my
-previous role at XYZ Company. I'm known for my
-problem-solving skills and my ability to work
-collaboratively with cross-functional teams. Outside of
-work, I'm passionate about volunteering for coding boot
-camps, where I mentor aspiring developers.`,
+    question: `What are race conditions in Go? How can you detect and prevent them?`,
+    answer: `A race condition occurs when multiple goroutines access shared data concurrently, and at least one of them modifies it, leading to unpredictable results depending on the timing of operations.- Detection: Use Go's built-in race detector: go test -race or go run -race.- Prevention:  - Mutexes (sync.Mutex, sync.RWMutex): Protect shared data by allowing only one goroutine (or multiple readers for RWMutex) to access it at a time.  - Channels: Communicate data between goroutines instead of sharing memory. This often makes ownership clearer, aligning with Go's "Don't communicate by sharing memory; share memory by communicating" philosophy.  - Atomic operations (sync/atomic package): For simple counter or flag updates that require high performance.`,
   },
   {
-    question: `Why should we hire you?`,
-    answer: `You should hire me because I bring a unique
-combination of technical expertise, leadership experience,
-and a proven track record of delivering results. In my
-previous role at ABC Inc., I not only led a team that
-completed a critical project ahead of schedule but also
-identified and implemented process improvements that
-saved the company 20% in operational costs. My ability to
-collaborate effectively and my commitment to continuous
-learning make me a valuable asset to any team.`,
+    question: `Explain deadlocks in Go and how to avoid them.`,
+    answer: `A deadlock occurs when two or more goroutines are blocked forever, each waiting for the other to release a resource. A classic example is two goroutines trying to acquire two locks in opposite orders.- Avoidance:  - Lock Ordering: Always acquire locks in a consistent, predefined order across all goroutines.  - Avoid Nested Locks: If possible, reduce the scope of locks and avoid holding multiple locks simultaneously.  - Use select with timeouts or default cases: For channel operations to prevent indefinite blocking if no communication partner is ready.  - Careful Design: Plan the interaction and resource access patterns of your concurrent components meticulously.`,
   },
   {
-    question: `What's your greatest strength?`,
-    answer: `One of my greatest strengths is my adaptability.
-I thrive in dynamic work environments and have
-consistently demonstrated the ability to learn new
-technologies quickly. For example, at my previous job, I
-was asked to lead a project that involved using a
-programming language I had never worked with before.
-I immersed myself in learning it and successfully
-delivered the project on time.`,
+    question: `What are Go Modules?`,
+    answer: `Go Modules are Go's official dependency management system, introduced in Go 1.11 and the default since Go 1.14. They allow projects to define their dependencies and specific versions independently of their location in GOPATH.- go.mod file: Defines the module path, the Go version, and the project's direct dependencies with their required versions.- go.sum file: Contains checksums of direct and indirect dependencies to ensure the integrity and authenticity of downloaded modules.- Commands: go mod init, go get, go mod tidy, go build, go test etc., all work within the context of a module.`,
   },
   {
-    question: `What's your greatest weakness?`,
-    answer: `I used to struggle with delegating tasks, often
-taking on too much myself. However, I recognized this as
-a weakness and actively worked on improving my
-delegation skills. I now understand the importance of
-empowering team members and have seen how it
-enhances both productivity and team morale.`,
+    question: `Explain the difference between slice and array again, focusing on their underlying structure and behavior.`,
+    answer: `An Array is a fixed-size sequence of elements of the same type. Its size is part of its type ([5]int is different from [10]int). Arrays are value types; when you pass an array to a function or assign it, a copy is made.A Slice is a dynamic-sized, flexible view into an underlying array. A slice is a struct (descriptor) containing three fields:1.  Pointer: Points to the first element of the accessible portion of the underlying array.2.  Length: The number of elements currently in the slice.3.  Capacity: The number of elements in the underlying array, starting from the slice's pointer, that are available for the slice to use.Slices are reference types in behavior (though technically a struct passed by value); changes made to the slice's elements modify the underlying array, affecting other slices that point to the same array. When a slice grows beyond its capacity using append, a new, larger underlying array is allocated, and the elements are copied to the new array. The slice's pointer is then updated to point to this new array.`,
   },
   {
-    question: `Can you describe a challenging situation you faced at work
-and how you handled it?`,
-    answer: `Certainly. In my previous role, we faced a tight
-deadline to complete a project with a high degree of
-complexity. The team was under immense pressure, and
-conflicts started to arise. I took the initiative to organize a
-team meeting, where we openly discussed our concerns
-and brainstormed solutions. By fostering open
-communication and reassigning tasks based on team
-members' strengths, we not only met the deadline but also
-improved team dynamics.`,
+    question: `How would you implement a simple worker pool in Go?`,
+    answer: `A common way to implement a worker pool involves:1.  A channel for jobs: A buffered channel where tasks (jobs) are sent.2.  A channel for results: A channel where workers send back results (optional, but common).3.  Worker goroutines: A fixed number of goroutines that listen on the job channel, process tasks, and send results to the result channel.4.  A sync.WaitGroup: To wait for all worker goroutines to finish processing all jobs.The main goroutine sends jobs to the job channel, closes the job channel when all jobs are sent, and waits for the WaitGroup. Workers loop, receiving jobs from the job channel until it's closed, process the job, send results (if applicable), and call Done() on the WaitGroup.`,
   },
   {
-    question: `Where do you see yourself in 5 years?`,
-    answer: `In five years, I see myself in a leadership role
-within the company, possibly in a senior project
-management position. I'm dedicated to continuous
-growth and would like to leverage my experience to
-mentor and lead teams to success while contributing to
-the company's long-term goals.`,
+    question: `Explain Go's garbage collection mechanism.`,
+    answer: `Go uses a concurrent, tri-color mark-and-sweep garbage collector. It aims for low latency by performing most of the marking phase concurrently with the running program.- Tri-Color: Objects are conceptually colored white (unvisited), grey (visited, but its children haven't been scanned), or black (visited, and all its children have been scanned).- Mark Phase: The collector starts by marking root objects (globals, stack variables) as grey. It then traverses the object graph, moving grey objects to black and marking their children grey. This happens mostly concurrently.- Sweep Phase: After the mark phase, the collector iterates through the memory, reclaiming memory occupied by white objects (those not reachable from roots).- Pacing: The collector uses a "pacer" to decide when to run the next collection cycle, aiming to start when the heap size has grown by a certain factor since the last collection.`,
   },
   {
-    question: `Why did you leave your last job?`,
-    answer: `I left my last job because I felt that I had outgrown
-the opportunities it offered. I was seeking new challenges
-and a role that aligned better with my career goals. I
-wanted to contribute my skills and expertise to a company
-where I could make a more significant impact, which is
-why I'm excited about the opportunity with your
-organization.`,
+    question: `What is reflection in Go? When would you use it and what are its drawbacks?`,
+    answer: `Reflection is the ability of a program to examine and modify its own structure and behavior at runtime. In Go, the reflect package provides this capability.- Use Cases: Common in libraries or frameworks that need to work with arbitrary types, such as JSON/XML encoding/decoding, ORMs, serialization libraries, testing utilities, or dependency injection.- Drawbacks:  - Performance: Reflection is significantly slower than direct access.  - Type Safety: Reflection bypasses Go's static type checking, making it easier to introduce runtime errors (panics).  - Complexity: Code using reflection is often more difficult to read, write, and maintain.It should be used judiciously when static typing isn't feasible or when building generic infrastructure.`,
   },
   {
-    question: `Can you tell me about a time you failed and what you learned from
-it?`,
-    answer: `One notable failure occurred when I was
-managing a project that ended up exceeding the budget
-due to unforeseen challenges. It was a difficult situation,
-but I took full responsibility, communicated transparently
-with stakeholders, and devised a cost-cutting plan. This
-experience taught me the importance of thorough risk
-assessment and proactive problem-solving, skills I've
-since honed to prevent similar issues in the future.`,
+    question: `How do you handle signals in Go?`,
+    answer: `Go applications can handle operating system signals (like SIGINT for Ctrl+C, SIGTERM for graceful shutdown) using the os/signal package. You typically create a channel that receives os.Signal values and use signal.Notify to register which signals you want to receive on that channel. A goroutine can then block on this channel, waiting for a signal to trigger cleanup or shutdown procedures.`,
   },
   {
-    question: `How do you handle stress or pressure?`,
-    answer: `I handle stress and pressure by first staying
-organized and breaking down tasks into manageable
-steps. I also prioritize effectively and maintain open
-communication with my team to ensure everyone is
-aligned and informed. Additionally, I make it a point to
-take short breaks to recharge and maintain a healthy
-work-life balance.`,
+    question: `Explain the use of the iota identifier.`,
+    answer: `iota is a predeclared identifier used in const declarations. It represents successive untyped integer constants. The first use of iota in a const declaration is 0, the second is 1, and so on. It resets to 0 for each new const block. It's commonly used to create enumerations or sets of related constant values.\`\`\`goconst (    C0 = iota // 0    C1        // 1    C2        // 2)const (    A = iota * 10 // 0 * 10 = 0    B             // 1 * 10 = 10    C             // 2 * 10 = 20)const (    // iota resets to 0 here    Flag1 = 1 << iota // 1 << 0 = 1    Flag2             // 1 << 1 = 2    Flag3             // 1 << 2 = 4)\`\`\``,
   },
   {
-    question: `Can you describe a situation where you had to work with a difficult
-coworker?`,
-    answer: `In my previous role, I encountered a colleague
-who had a different working style and communication
-approach, leading to conflicts. To address this, I initiated
-a one-on-one conversation to understand their
-perspective and find common ground. We established
-clear communication guidelines, which significantly
-improved our collaboration and overall team dynamics.`,
+    question: `What is the go generate command?`,
+    answer: `go generate is a command that scans Go source files for special comments (//go:generate command args) and runs the specified commands. It's a flexible tool used for automating tasks like:- Generating code (e.g., String() methods using stringer).- Generating mocks (go install github.com/vektra/mockery/...@latest).- Generating parser or lexer code.- Embedding assets into executables.It helps keep generated code in sync with the source code it's derived from.`,
   },
   {
-    question: `What's your leadership style?`,
-    answer: `I would describe my leadership style as
-collaborative and results-oriented. I believe in
-empowering team members to make decisions within
-their areas of expertise while providing clear guidance
-and support. I also emphasize setting measurable goals
-and regularly checking progress to ensure we stay on
-track.`,
+    question: `How do you embed dependencies or assets into a Go binary?`,
+    answer: `Since Go 1.16, the standard library provides the embed package for embedding files and file trees into a Go binary. You can use directives like //go:embed filename.txt or //go:embed folder/* followed by a variable declaration (string, []byte, or fs.FS). This makes your binary self-contained and simplifies deployment.Before Go 1.16, third-party tools like go-bindata or packr were commonly used.`,
   },
   {
-    question: `How do you stay updated with industry trends and
-developments?`,
-    answer: `I stay updated with industry trends by
-subscribing to industry-specific publications,
-participating in webinars and conferences, and actively
-engaging with professional networks and forums.
-Additionally, I make it a priority to seek out online
-courses and certifications to continually enhance my skills
-and knowledge.`,
+    question: `Describe the difference between sync.Map and a regular map with a sync.Mutex.`,
+    answer: `- Regular map with sync.Mutex: Requires explicitly locking and unlocking the mutex around every read and write operation. This is straightforward but can be inefficient for highly concurrent access patterns, especially if reads are frequent, as every read requires exclusive lock acquisition.- sync.Map: Designed for concurrently accessed maps where keys are only written once and read many times (e.g., caches). It uses a more complex internal structure with a read-mostly map and a mutable map, employing atomic operations and mutexes internally. It aims to provide better performance for specific read-heavy concurrent scenarios compared to a simple map guarded by a single mutex.Choose sync.Map when your use case matches its design (concurrent, read-heavy, keys written infrequently). For general-purpose concurrent map access, a regular map with a sync.RWMutex or sync.Mutex is often simpler and sufficient, or even faster depending on the access pattern.`,
   },
   {
-    question: `What do you know about our company?`,
-    answer: `I've thoroughly researched your company and
-am impressed by your innovative products and
-commitment to sustainability. Your recent expansion into
-international markets caught my attention, and I believe
-my experience in global project management aligns well
-with your company's growth trajectory. Your mission to
-improve people's lives through technology resonates with
-my personal and professional values.`,
+    question: `What is the role of the net/context (now context) package?`,
+    answer: `The context package (context was moved from golang.org/x/net/context to the standard library in Go 1.7) is used to carry request-scoped values, cancellation signals, and deadlines across API boundaries, typically between goroutines in concurrent programs (like handling incoming requests in a server).It allows you to build cancelable and timeout-aware operations, ensuring that resources are released and goroutines are stopped when they are no longer needed (e.g., when a client disconnects or a request times out). Functions that need context-awareness should accept a context.Context as their first argument.`,
   },
   {
-    question: `Why do you want to work here?`,
-    answer: `I want to work here because I'm drawn to your
-company's culture of innovation and your commitment to
-making a positive impact on the world. Your reputation
-for fostering employee growth and development also
-aligns perfectly with my career aspirations. I'm excited
-about the opportunity to contribute my skills and be part
-of a dynamic team.`,
+    question: `How would you implement a graceful shutdown of an HTTP server in Go?`,
+    answer: `Graceful shutdown allows an HTTP server to stop accepting new connections but continue serving existing ones until they complete, preventing abrupt interruption of ongoing requests.1.  Listen for Signals: Use os/signal to listen for termination signals (SIGINT, SIGTERM).2.  Create a context.Context: Use context.WithCancel or context.WithTimeout.3.  Start Server in Goroutine: Run http.Server.ListenAndServe or ListenAndServeTLS in a separate goroutine.4.  Block on Signal Channel: The main goroutine blocks until a signal is received.5.  Call Shutdown(): When a signal is received, call http.Server.Shutdown(ctx). The Shutdown method stops the server from accepting new connections, closes idle connections, and waits for active connections to finish (respecting the context's deadline/cancellation).6.  Wait for Server Goroutine: Use sync.WaitGroup or listen on a channel to know when the server's ListenAndServe goroutine exits (it returns http.ErrServerClosed after Shutdown is called).`,
   },
   {
-    question: `Can you provide an example of a time you had to adapt to
-a change at work?`,
-    answer: `Certainly. In my previous role, our company
-underwent a significant software migration project that
-required all employees to learn a new system. I embraced
-this change by proactively seeking training, assisting
-colleagues in the transition, and providing feedback to
-improve the process. As a result, our team adapted
-quickly, and the transition was remarkably smooth.`,
+    question: `What are generics in Go (introduced in Go 1.18)?`,
+    answer: `Generics allow you to write functions and types that work with multiple types without requiring the use of the empty interface (interface{}) and reflection. They enable code reuse while maintaining type safety.You define type parameters in square brackets [] after the function name or type name. These type parameters can have constraints (comparable, any, or custom interfaces) that specify which types are allowed to be used as arguments for the type parameter.Example:\`\`\`gofunc Map[T, U any](s []T, f func(T) U) []U {    result := make([]U, len(s))    for i, v := range s {        result[i] = f(v)    }    return result}\`\`\`Here, T and U are type parameters. any is a constraint meaning any type is allowed.`,
   },
   {
-    question: `What motivates you in your career?`,
-    answer: `What motivates me is the opportunity to
-continually learn and grow professionally. I thrive when I
-can tackle new challenges and expand my skill set.
-Additionally, I find great motivation in knowing that my
-work contributes to the success of the team and the
-company as a whole.`,
+    question: `How do you perform profiling in Go?`,
+    answer: `Go has excellent built-in profiling tools via the pprof package (runtime/pprof and net/http/pprof).1.  For Web Servers: Import net/http/pprof. This registers handlers at /debug/pprof which provide CPU, heap, goroutine, block, and mutex profiles.2.  For Command-Line Apps/Batch Jobs: Use runtime/pprof to manually start and stop CPU profiling (pprof.StartCPUProfile, pprof.StopCPUProfile) or write heap profiles (pprof.WriteHeapProfile).3.  Analyze Profiles: Use the go tool pprof command with the profile data (either the file or the URL for web servers) to analyze performance, view call graphs, flame graphs, etc.`,
   },
   {
-    question: `Can you describe a project where you had to meet tight deadlines.
-How did you manage it?`,
-    answer: `I encountered a project where we had an
-unexpectedly tight deadline due to a client's urgent
-request. To meet the deadline, I implemented a structured
-project plan, allocated tasks based on team members'
-strengths, and closely monitored progress. We also
-maintained open communication with the client,
-managing expectations and delivering the project on
-time.`,
+    question: `Describe the concept of 'escaping' in Go.`,
+    answer: `Escape analysis is a compiler optimization. It determines whether a variable allocated on the stack "escapes" to the heap. If a variable's lifetime is longer than the function it's declared in, or if it's accessed by multiple goroutines, it must be allocated on the heap; otherwise, it can be allocated on the stack.- Stack Allocation: Faster, memory is automatically reclaimed when the function returns, less pressure on the garbage collector.- Heap Allocation: Slower (requires GC), used for variables that need to persist beyond the function call or are shared across goroutines.Go's compiler performs escape analysis automatically. You can see the results using go build -gcflags='-m'.`,
   },
   {
-    question: `What is your preferred work style: working independently
-or in a team?`,
-    answer: `I value both working independently and
-collaborating with a team. I find that independent work
-allows me to focus and execute tasks efficiently, while
-teamwork fosters creativity and diverse perspectives. My
-approach depends on the project's requirements, and I'm
-adaptable in both scenarios.`,
+    question: `When might you use the unsafe package?`,
+    answer: `The unsafe package allows operations that bypass Go's type safety and memory safety guarantees, such as pointer arithmetic and converting between arbitrary types and pointers.- Use Cases: Interfacing with C code (cgo), performance-critical operations where type-safe Go code is too slow, low-level system programming, working with memory-mapped files, or implementing data structures with specific memory layouts.- Drawbacks: Code using unsafe is not guaranteed to be portable, can introduce memory bugs (like use-after-free), breaks type safety, and might be brittle across different Go versions or architectures.It should be used only when absolutely necessary and with extreme caution.`,
   },
   {
-    question: `How do you handle constructive criticism?`,
-    answer: `I welcome constructive criticism as an
-opportunity for growth. When receiving feedback, I
-actively listen, ask clarifying questions, and express
-gratitude for the input. I then take the feedback to heart
-and use it to improve my performance. Constructive
-criticism has been instrumental in my professional
-development.`,
+    question: `Explain method sets in Go.`,
+    answer: `A method set is the collection of methods associated with a type. It determines which interfaces a type implements.- For a value type T: The method set consists of all methods declared with a value receiver (func (t T) Method()).- For a pointer type *T: The method set consists of all methods declared with either a value receiver (func (t T) Method()) or a pointer receiver (func (t *T) Method()).This means that if you have a value v of type T, you can only call methods with a value receiver. If you have a pointer p of type *T, you can call methods with both value and pointer receivers (the compiler will handle taking the address or dereferencing). An interface variable i can hold a value of type T only if the method set of T is a superset of the interface's methods. It can hold a value of type *T only if the method set of *T is a superset of the interface's methods.`,
   },
   {
-    question: `Can you discuss a time you had to resolve a customer's
-complaint or issue?`,
-    answer: `Certainly. In my previous role as a customer
-service representative, I encountered a situation where a
-customer was dissatisfied with our product. I empathized
-with their frustration, actively listened to their concerns,
-and offered a solution that exceeded their expectations.
-The customer ultimately became a loyal advocate for our
-brand.`,
+    question: `How does cgo work?`,
+    answer: `cgo is the mechanism that allows Go programs to call C code and C code to call Go code. It processes special comments in Go source files (import "C") that contain C code (declarations, functions, types).- Calling C from Go: cgo generates Go code that acts as a bridge to the C functions/types defined in the comments or included headers. This involves type conversions between Go and C representations.- Calling Go from C: You can export Go functions using //export FunctionName comments, and cgo will generate C-callable wrapper functions.cgo adds overhead due to the need to switch between the Go runtime stack and the C stack, type conversions, and potential synchronization issues. It also results in larger binaries and disables some Go toolchain features like cross-compilation to environments without a C compiler.`,
   },
   {
-    question: `How do you handle ambiguity and uncertainty in a project?`,
-    answer: `I thrive in ambiguous situations by breaking
-down complex problems into manageable tasks. I also
-engage in thorough research and consultation with team
-members to gather insights and make informed decisions.
-
-My ability to adapt and remain calm under uncertainty
-has allowed me to successfully navigate challenging
-projects.`,
+    question: `What are Go Fuzzing tests?`,
+    answer: `Fuzzing is an automated testing technique that feeds unexpected, malformed, or random data as inputs to a program to discover bugs like crashes, panics, or security vulnerabilities.Go introduced native fuzzing support in Go 1.18 (go test -fuzz=FuzzTargetName). You write a fuzzing function starting with FuzzXxx that takes a *testing.F argument. The fuzzing engine repeatedly calls this function with new inputs derived from a corpus of seed inputs and newly generated inputs. The engine tries to generate inputs that increase code coverage or trigger interesting behavior.`,
   },
   {
-    question: `Can you describe a situation where you had to persuade a team to
-adopt your idea?`,
-    answer: `In a previous role, I proposed a new project
-management software to improve efficiency. To persuade
-the team, I conducted research to highlight the benefits,
-presented a clear implementation plan, and invited team
-members to share their input. By addressing concerns and
-demonstrating the positive impact, we gained unanimous
-support for the change.`,
+    question: `Explain the difference between panic and error.`,
+    answer: `- error: Represents anticipated or expected failures that are part of a function's normal control flow. Functions return an error value (often nil for success) to signal a problem. Callers are expected to check for and handle these errors explicitly.- panic: Indicates truly exceptional, unexpected, and often unrecoverable runtime errors (like accessing an index out of bounds, nil pointer dereference, or intentional panic() calls for critical failures). A panic stops the normal execution flow, unwinds the stack, and runs deferred functions. If not recovered (using recover() in a deferred function), it crashes the program.Errors are for expected problems you should handle; panics are for unexpected, catastrophic failures that usually indicate a programming bug or an unrecoverable system state.`,
   },
   {
-    question: `How do you prioritize tasks when you have multiple
-deadlines?`,
-    answer: `I prioritize tasks by assessing their urgency and
-importance. I create a task list, assign deadlines, and break
-down larger projects into smaller, manageable steps.
-Effective time management, delegation when possible,
-and regular progress checks help me ensure all deadlines
-are met.`,
+    question: `What is a Goroutine Leak? How can you cause or prevent one?`,
+    answer: `A goroutine leak occurs when a goroutine is started but never finishes execution, often because it's blocked indefinitely waiting for a resource (like a channel operation or a lock) that will never become available.- Causes:  - Sending to a channel that no one is receiving from.  - Receiving from a channel that no one is sending to.  - Blocking on a mutex that is never unlocked.  - Waiting on a sync.WaitGroup where Done() is not called the correct number of times.- Prevention:  - Use select with timeouts or default cases: Prevent indefinite blocking on channels.  - Ensure channels are closed: Signal to receivers that no more data is coming.  - Use context with cancellation/deadlines: Propagate cancellation signals to goroutines so they can exit gracefully.  - Careful Channel Design: Ensure every send has a potential receiver and vice-versa, or use buffered channels appropriately.  - Profile: Use go tool pprof with the goroutine profile (/debug/pprof/goroutine) to inspect running goroutines and identify blocked ones.`,
   },
   {
-    question: `Can you discuss a situation where you had to make a
-difficult decision at work?`,
-    answer: `Certainly. I was once tasked with deciding
-whether to allocate additional resources to salvage a
-project that was falling behind schedule. After conducting
-a thorough analysis, I made the tough decision to
-reallocate resources, which temporarily impacted other
-projects. In the end, the project was successfully
-completed, and I learned the importance of making data-
-driven decisions.`,
+    question: `How do you manage configuration in a Go application?`,
+    answer: `Common strategies for managing configuration include:- Environment Variables: Standard practice, especially for cloud-native applications (12-factor app). Simple and widely supported.- Configuration Files: Using formats like JSON, YAML, TOML, or .env. Libraries like viper, koanf, or simple encoding/json/gopkg.in/yaml.v2 can parse these.- Command-Line Flags: Using the flag package or third-party libraries like cobra or urfave/cli.- Configuration Services: Using external services like Consul, etcd, ZooKeeper, or cloud-specific configuration managers.Often, a combination is used, with environment variables or flags overriding values from config files.`,
   },
   {
-    question: `How do you handle a team member who is not meeting
-their goals or expectations?`,
-    answer: `When faced with a team member who is
-struggling, I take a proactive approach. I initiate a private
-conversation to understand their challenges, offer
-support, and set clear expectations. If the issues persist, I
-work with them to develop an improvement plan and
-provide ongoing feedback and coaching.`,
+    question: `What is the difference between concurrency and parallelism again?`,
+    answer: `- Concurrency: The ability to deal with multiple things at once. It's a way of structuring a program as independently executing components (like goroutines) that can be interleaved on a single processor or run simultaneously on multiple processors. Focuses on structure and composition.- Parallelism: The ability to do multiple things at the same time. It's about the execution of multiple computations simultaneously, requiring multiple processing units (cores). Focuses on execution and throughput.A concurrent program may or may not run in parallel, depending on the available hardware and the Go runtime's scheduler. A parallel program is inherently concurrent in its structure (multiple parts running at once).`,
   },
   {
-    question: `What do you consider your most significant professional
-achievement?`,
-    answer: `My most significant professional achievement
-was leading a cross-functional team that successfully
-launched a product ahead of schedule, resulting in a 30%
-increase in revenue for the company. This achievement
-showcased my leadership and project management skills
-and had a direct positive impact on the organization's
-bottom line.`,
+    question: `Explain the concept of 'channels are first-class citizens' in Go.`,
+    answer: `This means channels are not merely compiler primitives but can be treated like any other value in Go. They can be:- Assigned to variables.- Passed as arguments to functions.- Returned from functions.- Stored in data structures (slices, maps, structs).- Sent and received on other channels.This capability makes channels incredibly flexible for designing complex concurrent communication and synchronization patterns.`,
   },
   {
-    question: `Can you describe a time you had to deal with a difficult
-client or customer?`,
-    answer: `In a previous role, I worked with a particularly
-demanding client who was dissatisfied with our services.
-I maintained professionalism, actively listened to their
-concerns, and took swift action to address their issues. By
-exceeding their expectations and providing exceptional
-service, we not only retained the client but also received
-positive referrals.`,
+    question: `How does the Go scheduler work?`,
+    answer: `The Go scheduler uses a M:P:G model:- M (Machine): An OS thread.- P (Processor): A logical processor provided by the scheduler, which needs to be associated with an M to execute Goroutines.- G (Goroutine): A goroutine, representing a concurrent function execution.The scheduler multiplexes Gs onto Ps, and Ps are executed by Ms. When a goroutine blocks on a system call (like I/O), its M is blocked, but its P is handed off to another M, allowing other goroutines associated with that P to continue running. If a goroutine blocks on a channel or mutex, the scheduler can deschedule it and run another goroutine on the same P. This cooperative scheduling for Go's internal blocking points (channels, mutexes) combined with the hand-off mechanism for syscall blocking allows the scheduler to keep OS threads busy and efficiently manage a large number of goroutines.`,
   },
   {
-    question: `How do you handle failure or setbacks in a project?`,
-    answer: `I view failure or setbacks as opportunities for
-learning and improvement. When faced with setbacks, I
-conduct a thorough analysis to identify the root causes
-and develop corrective action plans. This proactive
-approach ensures that I not only address immediate issues
-but also prevent similar problems in the future.`,
+    question: `What are Go plugins? What are their limitations?`,
+    answer: `Go plugins (using the plugin package) allow you to build a Go program that can load and link code (plugins) at runtime. Plugins must be built specifically with the plugin build mode (go build -buildmode=plugin).- Use Cases: Implementing dynamic loading of modules, implementing plugin architectures, or providing extensibility for applications.- Limitations:  - Platform Support: Primarily works on Linux and macOS (less stable/supported on Windows).  - Go Version Compatibility: The plugin and the main program must be built with the exact same Go compiler version.  - Dependency Conflicts: Can be tricky if the plugin and main program have conflicting dependencies or versions.  - Type Identity: Types in the plugin are distinct from types in the main program, even if they have the same name and structure (unless passed via interfaces or serialized/deserialized).`,
   },
   {
-    question: `What role do ethics and integrity play in your work?`,
-    answer: `Ethics and integrity are fundamental to my work.
-I believe in conducting business honestly, treating all
-stakeholders with respect, and adhering to ethical
-standards and company policies. Upholding these values
-builds trust, maintains reputation, and contributes to a
-positive work environment.`,
+    question: `Explain Tail Call Optimization (TCO) in Go.`,
+    answer: `Go's compiler does not guarantee Tail Call Optimization (TCO). TCO is a compiler optimization where a function call at the very end of another function (a tail call) can sometimes be executed without allocating a new stack frame, potentially preventing stack overflow errors in deeply recursive functions.Because Go's scheduler manages goroutine stacks, which can grow and shrink, and because of the need to integrate with C code and support features like reflection and garbage collection stack scanning, implementing a general-purpose TCO is complex and not prioritized. Deep recursion is generally discouraged in favor of iterative solutions or explicit stack management if necessary.`,
   },
   {
-    question: `Can you describe a situation where you had to handle confidential
-information?`,
-    answer: `In my previous role, I was entrusted with
-confidential client data. I ensured its security by following
-strict protocols, limiting access to authorized personnel,
-and regularly updating encryption measures.
-Maintaining confidentiality is a core responsibility, and I
-take it very seriously.`,
-  },
-  {
-    question: `What's your approach to setting and achieving career goals?`,
-    answer: `I set SMART (Specific, Measurable, Achievable,
-Relevant, Time-bound) goals to ensure clarity and
-attainability. I break down larger career goals into smaller,
-actionable steps and regularly review progress.
-Additionally, I seek mentorship and professional
-development opportunities to stay on track and
-continuously advance.`,
-  },
-  {
-    question: `Can you provide an example of a time you had to lead a
-team through a crisis?`,
-    answer: `I once led a team that faced a sudden crisis when
-a key team member had to take medical leave during a
-critical project phase. I quickly reassigned tasks, adjusted
-timelines, and communicated transparently with
-stakeholders about the situation. By leveraging the team's
-strengths and maintaining focus, we successfully
-mitigated the crisis and delivered the project on schedule.`,
-  },
-  {
-    question: `How do you stay organized and manage your time
-effectively?`,
-    answer: `I stay organized by using a combination of digital
-tools and time management techniques. I maintain a
-detailed calendar, set priorities, and allocate time for
-specific tasks. I also practice the Pomodoro Technique to
-maintain focus and productivity throughout the day.`,
-  },
-  {
-    question: `Can you discuss a time you had to negotiate a challenging
-contract or deal?`,
-    answer: `Certainly. In my previous role, I negotiated a
-complex contract with a client who had specific demands
-and tight budget constraints. To reach an agreement, I
-conducted thorough research, identified mutually
-beneficial terms, and engaged in open and transparent
-communication. We successfully closed the deal, and both
-parties were satisfied with the outcome.`,
-  },
-  {
-    question: `How do you handle a situation where you disagree with
-your supervisor's decision?`,
-    answer: `When I disagree with a supervisor's decision, I
-approach the situation with respect and professionalism.
-I seek clarification to understand their perspective, share
-my viewpoint with supporting evidence, and propose
-alternative solutions if applicable. Ultimately, I respect
-their final decision and continue to work collaboratively.`,
-  },
-  {
-    question: `Can you describe a time you had to adapt to a new software
-or technology quickly?`,
-    answer: `Certainly. In a previous role, I was required to
-learn a new project management software within a short
-timeframe to effectively manage a project. I immersed
-myself in online tutorials, attended training sessions, and
-sought guidance from colleagues with expertise in the
-software. My dedication paid off, as I became proficient in
-the software and successfully managed the project.`,
-  },
-  {
-    question: `How do you handle a situation where a project is falling
-behind schedule?`,
-    answer: `When a project is falling behind schedule, I take
-immediate action by assessing the reasons for the delay,
-reallocating resources if necessary, and devising a
-recovery plan. I also maintain transparent communication
-with stakeholders, keeping them informed about the
-situation and the steps being taken to get back on track.`,
-  },
-  {
-    question: `Can you discuss a time you had to resolve a conflict within
-your team?`,
-    answer: `In my role as a team leader, I encountered a
-situation where two team members had a disagreement
-that was affecting team morale. I facilitated a private
-discussion, actively listened to both parties, and helped
-them find common ground. By addressing the issue
-promptly and effectively, we restored a harmonious
-working environment.`,
-  },
-  {
-    question: `How do you keep yourself motivated and engaged during
-routine or repetitive tasks?`,
-    answer: `I stay motivated during routine tasks by finding
-ways to make them more engaging and efficient. I seek
-opportunities to streamline processes, set personal
-performance goals, and focus on the larger purpose or
-impact of the task. This approach helps me maintain a
-high level of motivation and commitment.`,
-  },
-  {
-    question: `Can you discuss a time you had to deliver a presentation to
-a large audience?`,
-    answer: `Certainly. I had the opportunity to deliver a
-presentation at an industry conference attended by over
-500 professionals. To prepare, I invested time in
-researching the topic thoroughly, creating engaging
-visual aids, and practicing my delivery extensively. The
-presentation was well-received, and it boosted my
-confidence in public speaking.`,
-  },
-  {
-    question: `How do you handle high-pressure situations, such as tight
-deadlines or unexpected crises?`,
-    answer: `In high-pressure situations, I remain calm and
-focused by prioritizing tasks, breaking them down into
-manageable steps, and communicating effectively with
-the team. I also draw on my problem-solving skills and
-experience to make informed decisions swiftly.`,
-  },
-  {
-    question: `Can you discuss a time when you had to work on a project
-with limited resources?`,
-    answer: `Certainly. In a previous role, we had a project
-with budget constraints. To maximize our resources, I
-identified cost-effective solutions, optimized processes,
-and leveraged the skills of team members effectively. This
-allowed us to deliver a successful project within the
-limitations.`,
-  },
-  {
-    question: `What's the most innovative idea you've implemented in
-your previous role?`,
-    answer: `In my last role, I introduced an automated data
-analysis tool that significantly reduced manual data entry
-and processing time, improving efficiency by 40%. This
-innovation not only saved time but also enhanced data
-accuracy.`,
-  },
-  {
-    question: `How do you stay motivated and productive during remote
-work or when working independently?`,
-    answer: `To stay motivated and productive during remote
-work, I establish a dedicated workspace, maintain a
-structured daily routine, and set clear goals. Regular
-check-ins with my team and regular breaks help maintain
-motivation and focus.`,
-  },
-  {
-    question: `Can you describe a situation where you had to manage competing
-priorities?`,
-    answer: `In a previous role, I had to balance multiple
-projects with overlapping deadlines. To manage
-competing priorities, I created a priority matrix, assessed
-the urgency and importance of each task, and adjusted
-timelines and resources accordingly. Effective
-communication with stakeholders ensured everyone was
-aware of the situation.`,
-  },
-  {
-    question: `Can you provide an example of a time when you took the
-initiative to learn a new skill or technology?`,
-    answer: `Certainly. I recognized the importance of data
-analytics in my field, so I proactively enrolled in an online
-data analytics course and earned a certification. This
-allowed me to bring valuable data-driven insights to my
-team and improve decision-making.`,
-  },
-  {
-    question: `How do you handle feedback from peers or subordinates?`,
-    answer: `I value feedback as an opportunity for growth. I
-actively listen, consider the feedback objectively, and
-express gratitude for the insights. I then use the feedback
-to make improvements in my work or interactions.`,
-  },
-  {
-    question: `Can you discuss a time when you had to navigate a project
-with a diverse, multicultural team?`,
-    answer: `I had the opportunity to lead a multicultural team
-on a global project. To ensure effective collaboration, I
-promoted cultural sensitivity, encouraged open
-communication, and leveraged each team member's
-unique strengths. This approach led to a successful project
-outcome and enhanced team cohesion.`,
-  },
-  {
-    question: `How do you keep up with the latest industry trends and
-developments?`,
-    answer: `I stay current with industry trends by regularly
-reading industry publications, attending conferences,
-webinars, and participating in professional associations. I
-also network with industry peers to exchange insights and
-ideas.`,
-  },
-  {
-    question: `Can you describe a situation where you had to resolve a
-technical issue under tight time constraints?`,
-    answer: `In a previous role, we faced a technical issue
-during a critical project phase with a tight deadline. I
-assembled a cross-functional team, conducted a root cause
-analysis, and implemented a solution within hours,
-ensuring the project stayed on track.`,
-  },
-  {
-    question: `What's your approach to building and maintaining strong
-professional relationships?`,
-    answer: `I prioritize building professional relationships by
-being approachable, open to collaboration, and actively
-listening to others' perspectives. I also maintain clear and
-respectful communication and follow up on
-commitments, which fosters trust and strengthens
-relationships.`,
-  },
-  {
-    question: `Can you discuss a time you had to manage a budget for a
-project?`,
-    answer: `Certainly. I managed a project budget in my
-previous role by carefully tracking expenses, identifying
-cost-saving opportunities, and negotiating with suppliers.
-This resulted in a 15% cost reduction while still delivering
-a high-quality project.`,
-  },
-  {
-    question: `How do you handle situations where you have conflicting
-priorities with a colleague or team member?`,
-    answer: `In such situations, I seek a middle ground by
-engaging in open and respectful dialogue with the
-colleague or team member. I aim to find a compromise
-that aligns with the overall goals and priorities of the team
-or organization.`,
-  },
-  {
-    question: `Can you discuss a time when you had to handle a
-dissatisfied client or customer?`,
-    answer: `In a previous role, I had to address a dissatisfied
-client who was unhappy with our service. I actively
-listened to their concerns, offered solutions to rectify the
-issue, and maintained regular communication to ensure
-their satisfaction. Ultimately, we turned the situation
-around, and the client continued to work with us.`,
-  },
-  {
-    question: `How do you handle setbacks or obstacles in your career?`,
-    answer: `I view setbacks and obstacles as opportunities for
-growth and learning. I reflect on the situation, identify
-areas for improvement, and adapt my approach
-accordingly. These experiences have often led to personal
-and professional development.`,
-  },
-  {
-    question: `Can you discuss a time when you had to give a presentation
-without much preparation time?`,
-    answer: `Certainly. I once had to deliver an impromptu
-presentation due to a last-minute scheduling change. I
-drew on my subject knowledge and experience, organized
-my thoughts quickly, and delivered a concise and
-informative presentation that received positive feedback
-from the audience.`,
-  },
-  {
-    question: `What's your strategy for managing stress outside of work?`,
-    answer: `To manage stress outside of work, I prioritize
-self-care activities such as exercise, meditation, and
-spending quality time with friends and family. These
-activities help me relax, recharge, and maintain a healthy
-work-life balance.`,
-  },
-  {
-    question: `Can you provide an example of a time when you had to
-mediate a conflict between team members?`,
-    answer: `In a team project, two team members had
-conflicting ideas on the project's direction. I stepped in as
-a mediator, encouraged open communication, and
-facilitated a compromise that allowed us to move forward
-collaboratively and successfully.`,
-  },
-  {
-    question: `How do you ensure you're up to date with changes in laws,
-regulations, or compliance standards relevant to your field?`,
-    answer: `I stay informed about changes in laws,
-regulations, and compliance standards by regularly
-reviewing relevant government websites, attending
-compliance training sessions, and consulting with legal
-experts when necessary. Compliance is a crucial aspect of
-my work, and I prioritize staying current.`,
-  },
-  {
-    question: `Can you describe a situation when you had to lead a team
-through a major change or transition?`,
-    answer: `I led a team through a major software system
-transition that required process changes and retraining.
-To ensure a smooth transition, I created a detailed
-transition plan, provided comprehensive training, and
-offered ongoing support. The team successfully adapted
-to the change with minimal disruptions.`,
-  },
-  {
-    question: `What do you do to stay organized and avoid missing
-deadlines or commitments?`,
-    answer: `I use digital tools like calendars and task
-management apps to track deadlines and commitments. I
-also maintain a prioritized to-do list and regularly review
-and adjust it as needed. This systematic approach helps
-me stay organized and meet all my obligations.`,
-  },
-  {
-    question: `Can you discuss a time when you had to resolve a
-disagreement with your supervisor or manager?`,
-    answer: `In a previous role, I had a disagreement with my
-manager regarding the project's direction. I scheduled a
-private meeting to discuss our differing perspectives,
-presented data to support my position, and worked
-collaboratively to reach a mutually beneficial solution that
-aligned with the project's goals.`,
-  },
-  {
-    question: `How do you handle situations where you need to provide
-constructive feedback to a team member or colleague?`,
-    answer: `I approach providing constructive feedback with
-empathy and a focus on improvement. I choose an
-appropriate time and place, use specific examples, and
-offer solutions or suggestions for improvement. I aim to
-foster growth and development while maintaining a
-positive working relationship.`,
-  },
-  {
-    question: `Can you discuss a time when you had to make a decision
-with incomplete information?`,
-    answer: `I encountered a situation where I had to make a
-time-sensitive decision with limited information. I
-gathered available data, consulted relevant experts, and
-used my judgment to make the best decision under the
-circumstances. The decision was successful, and it
-highlighted my ability to make informed choices in
-challenging situations.`,
-  },
-  {
-    question: `What role do mentorship and professional development
-play in your career?`,
-    answer: `Mentorship and professional development are
-vital components of my career growth. I actively seek
-mentorship from experienced professionals to gain
-valuable insights and guidance. Additionally, I
-continually invest in professional development
-opportunities, such as courses and certifications, to stay
-relevant in my field.`,
-  },
-  {
-    question: `Can you describe a situation when you had to motivate a
-team member who was demotivated or struggling?`,
-    answer: `I once had a team member who was demotivated
-due to personal challenges. I approached them with
-empathy, offered support, and worked together to adjust
-their workload and deadlines. By showing understanding
-and offering assistance, we successfully helped them
-regain motivation and contribute positively to the team.`,
-  },
-  {
-    question: `How do you ensure your work aligns with the company's
-mission and values?`,
-    answer: `I regularly refer to the company's mission and
-values as guiding principles in my work. I ensure that my
-actions, decisions, and projects align with these values,
-and I actively contribute to a positive work culture that
-reflects the company's mission.`,
-  },
-  {
-    question: `Can you discuss a time when you had to take on additional
-responsibilities beyond your job description?`,
-    answer: `In a previous role, my team was short-staffed,
-and I willingly took on additional responsibilities to
-ensure project completion. I balanced these tasks
-alongside my existing workload and communicated
-effectively with my manager to prioritize deliverables.
-This flexibility allowed us to meet project deadlines
-successfully.`,
-  },
-  {
-    question: `How do you handle situations where you need to persuade
-stakeholders or team members to change their opinion or
-approach?`,
-    answer: `To persuade stakeholders or team members, I
-focus on presenting data-backed arguments and benefits.
-I actively listen to their concerns, address any objections,
-and find common ground. Building consensus through
-open and respectful communication is key to achieving
-buy-in for change.`,
-  },
-  {
-    question: `Can you provide an example of a time when you had to
-navigate a project with tight budget constraints?`,
-    answer: `Certainly. I managed a project with tight budget
-constraints by closely monitoring expenses, negotiating
-with suppliers for favorable terms, and optimizing
-resource allocation. By prioritizing essential elements and
-minimizing non-essential costs, we successfully delivered
-the project within budget.`,
+    question: `How would you design a simple in-memory cache with expiration in Go?`,
+    answer: `A simple design could involve:1.  A map[string]CacheItem: To store the cached data, where CacheItem is a struct containing the value and an expiration timestamp.2.  A sync.RWMutex: To protect the map for concurrent access.3.  Expiration Timestamp: Each CacheItem stores time.Time indicating when it expires.4.  Get Operation: Acquire read lock, check if key exists, check if item is expired. If expired, acquire write lock (or upgrade lock if RWMutex supports it, Go's doesn't), delete item, release lock, return not found. Otherwise, release read lock, return value.5.  Set Operation: Acquire write lock, store or update the item with value and expiration. Release write lock.6.  Cleanup Goroutine: A separate goroutine that periodically (e.g., every minute) acquires a write lock, iterates through the map, and deletes expired items. This prevents the cache from growing indefinitely with stale data. Alternatively, cleanup can happen lazily during Get/Set operations.`,
   },
 ];
-
-export default golang;

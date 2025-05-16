@@ -1,4 +1,4 @@
-const behaviour = [
+export const behaviour = [
   {
     question: `Would you please tell me about yourself?`,
     answer: `Certainly, I'd be happy to. I hold a Bachelor's
@@ -710,5 +710,3 @@ minimizing non-essential costs, we successfully delivered
 the project within budget.`,
   },
 ];
-
-export default behaviour;
