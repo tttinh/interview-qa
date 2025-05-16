@@ -5,24 +5,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
-import { Button } from '../ui/button';
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
-
-const links = [
-  {
-    label: 'Behaviour',
-    href: '/interview-qa',
-  },
-  {
-    label: 'Golang',
-    href: '/interview-qa/golang',
-  },
-  {
-    label: 'Python',
-    href: '/interview-qa/python',
-  },
-];
+import { links } from '@/assets/data';
 
 const activeStyle = 'text-primary font-semibold px-2 py-2';
 const normalStyle = 'text-primary/65 hover:text-primary px-2 py-2';
@@ -56,9 +42,8 @@ const Header = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             {links.map((link, index) => (
-              <DropdownMenuItem>
+              <DropdownMenuItem key={index}>
                 <NavLink
-                  key={index}
                   to={link.href}
                   end
                   className={({ isActive }) =>

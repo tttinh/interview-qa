@@ -5,12 +5,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-const TitleCard = () => {
+const Headline = () => {
   return (
     <Card className="w-full max-w-3xl">
       <CardHeader>
         <CardTitle className="text-center text-2xl sm:text-3xl md:text-4xl">
-          Interview Questions and Answers
+          We cannot answer every questions!
         </CardTitle>
         <CardDescription className="text-center sm:text-lg">
           That's a really interesting question and I wish I knew the answer. I
@@ -21,4 +21,4 @@ const TitleCard = () => {
   );
 };
 
-export default TitleCard;
+export default Headline;

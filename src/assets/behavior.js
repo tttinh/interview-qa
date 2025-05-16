@@ -1,4 +1,4 @@
-export const behaviour = [
+export const behavior = [
   {
     question: `Would you please tell me about yourself?`,
     answer: `Certainly, I'd be happy to. I hold a Bachelor's

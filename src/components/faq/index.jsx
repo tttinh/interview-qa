@@ -1,13 +1,13 @@
-import TitleCard from '@/components/faq/title-card';
+import Headline from '@/components/faq/headline';
 import QuestionTabs from '@/components/faq/question-tabs';
 
-const FAQPage = ({ data }) => {
+const FAQ = ({ data }) => {
   return (
     <section className="flex flex-col items-center gap-12 py-12">
-      <TitleCard />
+      <Headline />
       <QuestionTabs questions={data} />
     </section>
   );
 };
 
-export default FAQPage;
+export default FAQ;
