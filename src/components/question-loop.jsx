@@ -7,11 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { questions } from '@/assets/data';
 import { useState } from 'react';
 import { Package, PackageOpen } from 'lucide-react';
 
-const QuestionLoop = () => {
+const QuestionLoop = ({ questions }) => {
   const [id, setID] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 

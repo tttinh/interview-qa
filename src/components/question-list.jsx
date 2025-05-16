@@ -4,9 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { questions } from '@/assets/data';
 
-const QuestionList = () => {
+const QuestionList = ({ questions }) => {
   return (
     <>
       <Accordion type="single" collapsible className="w-full">

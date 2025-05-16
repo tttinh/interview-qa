@@ -1,9 +1,9 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { ModeToggle } from '@/components/mode-toggle';
-import TitleCard from './components/title-card';
-import QuestionTabs from './components/question-tabs';
 
-const App = () => {
+import { Outlet } from 'react-router';
+
+const Layout = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <main className="container-auto">
@@ -13,12 +13,11 @@ const App = () => {
         </header>
 
         <section className="flex flex-col items-center gap-12 py-12">
-          <TitleCard />
-          <QuestionTabs />
+          <Outlet />
         </section>
       </main>
     </ThemeProvider>
   );
 };
 
-export default App;
+export default Layout;

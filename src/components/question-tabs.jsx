@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import QuestionList from '@/components/question-list';
 import QuestionLoop from '@/components/question-loop';
 import QuestionShuffle from './question-shuffle';
+import { cloneElement } from 'react';
 
 const tabs = [
   {
@@ -25,7 +26,7 @@ const tabs = [
     component: <QuestionShuffle />,
   },
 ];
-const QuestionTabs = () => {
+const QuestionTabs = ({ questions }) => {
   return (
     <Card className="w-full max-w-5xl">
       <CardContent>
@@ -41,7 +42,7 @@ const QuestionTabs = () => {
 
           {tabs.map((tab, index) => (
             <TabsContent key={index} value={tab.id}>
-              {tab.component}
+              {cloneElement(tab.component, { questions })}
             </TabsContent>
           ))}
         </Tabs>

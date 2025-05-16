@@ -7,11 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { questions } from '@/assets/data';
 import { useState } from 'react';
 import { Package, PackageOpen } from 'lucide-react';
 
-const QuestionShuffle = () => {
+const QuestionShuffle = ({ questions }) => {
   const [id, setID] = useState(Math.floor(Math.random() * questions.length));
   const [isOpen, setIsOpen] = useState(false);
 
