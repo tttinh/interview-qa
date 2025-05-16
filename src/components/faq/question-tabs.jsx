@@ -1,8 +1,8 @@
 import { List, Repeat, Shuffle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import QuestionList from '@/components/question-list';
-import QuestionLoop from '@/components/question-loop';
+import QuestionList from '@/components/faq/question-list';
+import QuestionLoop from '@/components/faq/question-loop';
 import QuestionShuffle from './question-shuffle';
 import { cloneElement } from 'react';
 
