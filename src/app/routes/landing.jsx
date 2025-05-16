@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { links } from '@/assets/data';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 
 const LandingRoute = () => {
   return (
@@ -20,14 +20,14 @@ const LandingRoute = () => {
               Interview Questions and Answers
             </CardTitle>
             <CardDescription className="text-center sm:text-lg">
-              Please pick a skill to start practicing.
+              Enjoy your journey. You chose this path. Pick a skill to start.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center gap-4">
             {links.map((link, index) => (
-              <Button className="w-32" key={index}>
-                <Link to={link.href}>{link.label}</Link>
-              </Button>
+              <NavLink key={index} to={link.href} end>
+                <Button className="w-32">{link.label}</Button>
+              </NavLink>
             ))}
           </CardContent>
         </Card>

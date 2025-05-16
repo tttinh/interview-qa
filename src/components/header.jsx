@@ -16,7 +16,9 @@ const normalStyle = 'text-primary/65 hover:text-primary px-2 py-2';
 const Header = () => {
   return (
     <header className="border-b-primary flex h-16 w-full items-center justify-between gap-4 border-b-2">
-      <h2 className="font-bold">Enjoy your journey! - You chose this path!</h2>
+      <NavLink to="/interview-qa">
+        <h2 className="text-lg font-bold">Interview QA</h2>
+      </NavLink>
 
       <div className="flex items-center gap-4">
         <nav className="hidden gap-1 lg:flex">
