@@ -2,21 +2,30 @@ import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { useState } from 'react';
-import { Package, PackageOpen } from 'lucide-react';
 
 const QuestionShuffle = ({ questions }) => {
   const [id, setID] = useState(Math.floor(Math.random() * questions.length));
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClick = () => {
+  const handleRandom = () => {
     setIsOpen(false);
     setID(Math.floor(Math.random() * questions.length));
+  };
+
+  const handleShowHideAnswer = () => {
+    setIsOpen(!isOpen);
+    const content = document.getElementById('answer');
+    // Toggle the content's max-height for smooth opening and closing
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+      content.style.maxHeight = '0';
+    } else {
+      content.style.maxHeight = content.scrollHeight + 'px';
+    }
   };
 
   return (
@@ -26,23 +35,22 @@ const QuestionShuffle = ({ questions }) => {
           {questions[id].question}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col items-center gap-4 py-8">
+      <CardContent>
         <div
-          onClick={() => setIsOpen(!isOpen)}
-          className="border-primary flex h-24 w-24 cursor-pointer items-center justify-center rounded-full border transition-transform duration-300 hover:scale-110"
+          id="answer"
+          class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
         >
-          {isOpen ? <PackageOpen size={48} /> : <Package size={48} />}
+          <p class="text-primary/65 text-sm sm:text-lg">
+            {questions[id].answer}
+          </p>
         </div>
-
-        <p
-          className={`text-primary/65 text-sm sm:text-lg ${isOpen ? 'block' : 'hidden'}`}
-        >
-          {questions[id].answer}
-        </p>
       </CardContent>
-      <CardFooter>
-        <Button onClick={handleClick} className="mx-auto w-full sm:w-32">
-          Next
+      <CardFooter className="flex justify-between gap-2 md:justify-center">
+        <Button onClick={handleShowHideAnswer} className="w-1/2 sm:w-32">
+          {isOpen ? 'Hide answer' : 'Show answer'}
+        </Button>
+        <Button onClick={handleRandom} className="w-1/2 sm:w-32">
+          Another question
         </Button>
       </CardFooter>
     </Card>
