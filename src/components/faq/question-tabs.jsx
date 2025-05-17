@@ -28,26 +28,24 @@ const tabs = [
 ];
 const QuestionTabs = ({ questions }) => {
   return (
-    <Card className="w-full max-w-5xl">
-      <CardContent>
-        <Tabs defaultValue={tabs[0].id}>
-          <TabsList className="flex w-full">
-            {tabs.map((tab, index) => (
-              <TabsTrigger key={index} value={tab.id}>
-                {tab.label}
-                {tab.icon}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
+    <section className="w-full max-w-5xl">
+      <Tabs defaultValue={tabs[0].id}>
+        <TabsList className="flex w-full">
           {tabs.map((tab, index) => (
-            <TabsContent key={index} value={tab.id}>
-              {cloneElement(tab.component, { questions })}
-            </TabsContent>
+            <TabsTrigger key={index} value={tab.id}>
+              {tab.label}
+              {tab.icon}
+            </TabsTrigger>
           ))}
-        </Tabs>
-      </CardContent>
-    </Card>
+        </TabsList>
+
+        {tabs.map((tab, index) => (
+          <TabsContent key={index} value={tab.id}>
+            {cloneElement(tab.component, { questions })}
+          </TabsContent>
+        ))}
+      </Tabs>
+    </section>
   );
 };
 

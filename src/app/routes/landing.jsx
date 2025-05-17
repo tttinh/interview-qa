@@ -23,7 +23,7 @@ const LandingRoute = () => {
               Enjoy your journey. You chose this path. Pick a skill to start.
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex justify-center gap-4">
+          <CardContent className="flex-center flex-col gap-4 sm:flex-row">
             {links.map((link, index) => (
               <NavLink key={index} to={link.href} end>
                 <Button className="w-32">{link.label}</Button>
