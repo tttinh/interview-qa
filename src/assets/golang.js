@@ -1,122 +1,215 @@
 export const golang = [
   {
-    question: `What are race conditions in Go? How can you detect and prevent them?`,
-    answer: `A race condition occurs when multiple goroutines access shared data concurrently, and at least one of them modifies it, leading to unpredictable results depending on the timing of operations.- Detection: Use Go's built-in race detector: go test -race or go run -race.- Prevention:  - Mutexes (sync.Mutex, sync.RWMutex): Protect shared data by allowing only one goroutine (or multiple readers for RWMutex) to access it at a time.  - Channels: Communicate data between goroutines instead of sharing memory. This often makes ownership clearer, aligning with Go's "Don't communicate by sharing memory; share memory by communicating" philosophy.  - Atomic operations (sync/atomic package): For simple counter or flag updates that require high performance.`,
+    question:
+      'Explain goroutines and how they differ from traditional threads.',
+    answer:
+      "Goroutines are lightweight, independently executing functions that run concurrently. Unlike OS threads, they are managed by the Go runtime's scheduler, not the operating system. This allows creating thousands or millions of goroutines with minimal overhead compared to the same number of OS threads, making concurrency significantly easier and more efficient.",
   },
   {
-    question: `Explain deadlocks in Go and how to avoid them.`,
-    answer: `A deadlock occurs when two or more goroutines are blocked forever, each waiting for the other to release a resource. A classic example is two goroutines trying to acquire two locks in opposite orders.- Avoidance:  - Lock Ordering: Always acquire locks in a consistent, predefined order across all goroutines.  - Avoid Nested Locks: If possible, reduce the scope of locks and avoid holding multiple locks simultaneously.  - Use select with timeouts or default cases: For channel operations to prevent indefinite blocking if no communication partner is ready.  - Careful Design: Plan the interaction and resource access patterns of your concurrent components meticulously.`,
+    question:
+      'What are channels, and how are they used for communication and synchronization?',
+    answer:
+      'Channels are typed conduits used for communicating and synchronizing goroutines. You send values into a channel using the `<-` operator and receive values using the same operator. By default, sends and receives block until the other end is ready, providing inherent synchronization. They are the primary way goroutines share data without explicit locks.',
   },
   {
-    question: `What are Go Modules?`,
-    answer: `Go Modules are Go's official dependency management system, introduced in Go 1.11 and the default since Go 1.14. They allow projects to define their dependencies and specific versions independently of their location in GOPATH.- go.mod file: Defines the module path, the Go version, and the project's direct dependencies with their required versions.- go.sum file: Contains checksums of direct and indirect dependencies to ensure the integrity and authenticity of downloaded modules.- Commands: go mod init, go get, go mod tidy, go build, go test etc., all work within the context of a module.`,
+    question:
+      'Explain the difference between buffered and unbuffered channels.',
+    answer:
+      'An unbuffered channel has a capacity of zero and requires both the sender and receiver to be ready simultaneously. A send on an unbuffered channel blocks until a receiver is available, and a receive blocks until a sender is available. A buffered channel has a capacity greater than zero. A send blocks only if the buffer is full, and a receive blocks only if the buffer is empty. This allows sends/receives to happen asynchronously up to the buffer capacity.',
   },
   {
-    question: `Explain the difference between slice and array again, focusing on their underlying structure and behavior.`,
-    answer: `An Array is a fixed-size sequence of elements of the same type. Its size is part of its type ([5]int is different from [10]int). Arrays are value types; when you pass an array to a function or assign it, a copy is made.A Slice is a dynamic-sized, flexible view into an underlying array. A slice is a struct (descriptor) containing three fields:1.  Pointer: Points to the first element of the accessible portion of the underlying array.2.  Length: The number of elements currently in the slice.3.  Capacity: The number of elements in the underlying array, starting from the slice's pointer, that are available for the slice to use.Slices are reference types in behavior (though technically a struct passed by value); changes made to the slice's elements modify the underlying array, affecting other slices that point to the same array. When a slice grows beyond its capacity using append, a new, larger underlying array is allocated, and the elements are copied to the new array. The slice's pointer is then updated to point to this new array.`,
+    question: 'What is the purpose of the `select` statement in Go?',
+    answer:
+      'The `select` statement is used with channels to wait on multiple communication operations (sends or receives). It blocks until one of its cases can proceed. If multiple cases are ready, one is chosen non-deterministically. It can include a `default` case to perform a non-blocking check on channels or execute if no case is ready.',
   },
   {
-    question: `How would you implement a simple worker pool in Go?`,
-    answer: `A common way to implement a worker pool involves:1.  A channel for jobs: A buffered channel where tasks (jobs) are sent.2.  A channel for results: A channel where workers send back results (optional, but common).3.  Worker goroutines: A fixed number of goroutines that listen on the job channel, process tasks, and send results to the result channel.4.  A sync.WaitGroup: To wait for all worker goroutines to finish processing all jobs.The main goroutine sends jobs to the job channel, closes the job channel when all jobs are sent, and waits for the WaitGroup. Workers loop, receiving jobs from the job channel until it's closed, process the job, send results (if applicable), and call Done() on the WaitGroup.`,
+    question:
+      'What primitives does the `sync` package provide for synchronization?',
+    answer:
+      'The `sync` package provides basic synchronization primitives like `sync.Mutex` (mutual exclusion lock), `sync.RWMutex` (reader/writer mutual exclusion lock), and `sync.WaitGroup` (to wait for a collection of goroutines to finish).',
   },
   {
-    question: `Explain Go's garbage collection mechanism.`,
-    answer: `Go uses a concurrent, tri-color mark-and-sweep garbage collector. It aims for low latency by performing most of the marking phase concurrently with the running program.- Tri-Color: Objects are conceptually colored white (unvisited), grey (visited, but its children haven't been scanned), or black (visited, and all its children have been scanned).- Mark Phase: The collector starts by marking root objects (globals, stack variables) as grey. It then traverses the object graph, moving grey objects to black and marking their children grey. This happens mostly concurrently.- Sweep Phase: After the mark phase, the collector iterates through the memory, reclaiming memory occupied by white objects (those not reachable from roots).- Pacing: The collector uses a "pacer" to decide when to run the next collection cycle, aiming to start when the heap size has grown by a certain factor since the last collection.`,
+    question: 'How do you use `sync.WaitGroup`?',
+    answer:
+      '`sync.WaitGroup` is used to wait for a collection of goroutines to finish. You call `Add(n)` to set the number of goroutines to wait for, `Done()` in each goroutine when it completes, and `Wait()` in the main goroutine (or parent goroutine) to block until the counter reaches zero.',
   },
   {
-    question: `What is reflection in Go? When would you use it and what are its drawbacks?`,
-    answer: `Reflection is the ability of a program to examine and modify its own structure and behavior at runtime. In Go, the reflect package provides this capability.- Use Cases: Common in libraries or frameworks that need to work with arbitrary types, such as JSON/XML encoding/decoding, ORMs, serialization libraries, testing utilities, or dependency injection.- Drawbacks:  - Performance: Reflection is significantly slower than direct access.  - Type Safety: Reflection bypasses Go's static type checking, making it easier to introduce runtime errors (panics).  - Complexity: Code using reflection is often more difficult to read, write, and maintain.It should be used judiciously when static typing isn't feasible or when building generic infrastructure.`,
+    question: 'Explain the difference between concurrency and parallelism.',
+    answer:
+      "Concurrency is about dealing with multiple things at the same time by structuring a program so that multiple tasks can make progress independently (e.g., interleaving execution on a single core). Parallelism is about *doing* multiple things at the same time by executing tasks simultaneously on multiple processing cores. Go's goroutines enable concurrency, which the runtime can execute in parallel if multiple cores are available.",
   },
   {
-    question: `How do you handle signals in Go?`,
-    answer: `Go applications can handle operating system signals (like SIGINT for Ctrl+C, SIGTERM for graceful shutdown) using the os/signal package. You typically create a channel that receives os.Signal values and use signal.Notify to register which signals you want to receive on that channel. A goroutine can then block on this channel, waiting for a signal to trigger cleanup or shutdown procedures.`,
+    question: 'What is synchronization in the context of concurrency?',
+    answer:
+      'Synchronization is the coordination of multiple concurrent processes or goroutines to ensure they interact correctly, particularly when accessing shared resources. It involves mechanisms (like mutexes, channels, wait groups) to control the order and timing of operations and prevent issues like race conditions, deadlocks, or data corruption.',
   },
   {
-    question: `Explain the use of the iota identifier.`,
-    answer: `iota is a predeclared identifier used in const declarations. It represents successive untyped integer constants. The first use of iota in a const declaration is 0, the second is 1, and so on. It resets to 0 for each new const block. It's commonly used to create enumerations or sets of related constant values.\`\`\`goconst (    C0 = iota // 0    C1        // 1    C2        // 2)const (    A = iota * 10 // 0 * 10 = 0    B             // 1 * 10 = 10    C             // 2 * 10 = 20)const (    // iota resets to 0 here    Flag1 = 1 << iota // 1 << 0 = 1    Flag2             // 1 << 1 = 2    Flag3             // 1 << 2 = 4)\`\`\``,
+    question: 'How can you detect race conditions in Go?',
+    answer:
+      'Go provides a built-in race detector. You can run your program or tests with the `-race` flag (e.g., `go run -race main.go`, `go test -race`). The race detector instruments the code to find potential race conditions during execution and reports them.',
   },
   {
-    question: `What is the go generate command?`,
-    answer: `go generate is a command that scans Go source files for special comments (//go:generate command args) and runs the specified commands. It's a flexible tool used for automating tasks like:- Generating code (e.g., String() methods using stringer).- Generating mocks (go install github.com/vektra/mockery/...@latest).- Generating parser or lexer code.- Embedding assets into executables.It helps keep generated code in sync with the source code it's derived from.`,
+    question: 'What is a goroutine leak and how can you prevent it?',
+    answer:
+      'A goroutine leak occurs when a goroutine is started but never exits, consuming memory and other resources unnecessarily. Common causes include: a goroutine waiting on a channel that is never sent to/received from, or blocked reads/writes on buffered channels that never empty/fill. Prevention involves ensuring all started goroutines have a way to complete, often using `context.Context` for cancellation signals or ensuring channel operations are matched or handled with `select` statements including a cleanup path.',
   },
   {
-    question: `How do you embed dependencies or assets into a Go binary?`,
-    answer: `Since Go 1.16, the standard library provides the embed package for embedding files and file trees into a Go binary. You can use directives like //go:embed filename.txt or //go:embed folder/* followed by a variable declaration (string, []byte, or fs.FS). This makes your binary self-contained and simplifies deployment.Before Go 1.16, third-party tools like go-bindata or packr were commonly used.`,
+    question: 'Describe some common Go concurrency patterns.',
+    answer:
+      'Common patterns include: Worker Pools (a fixed number of goroutines processing tasks from a channel), Fan-In/Fan-Out (multiple goroutines sending results to a single channel), Pipelines (channels connecting stages of processing), and using `context.Context` for cancellation and timeouts across goroutines.',
   },
   {
-    question: `Describe the difference between sync.Map and a regular map with a sync.Mutex.`,
-    answer: `- Regular map with sync.Mutex: Requires explicitly locking and unlocking the mutex around every read and write operation. This is straightforward but can be inefficient for highly concurrent access patterns, especially if reads are frequent, as every read requires exclusive lock acquisition.- sync.Map: Designed for concurrently accessed maps where keys are only written once and read many times (e.g., caches). It uses a more complex internal structure with a read-mostly map and a mutable map, employing atomic operations and mutexes internally. It aims to provide better performance for specific read-heavy concurrent scenarios compared to a simple map guarded by a single mutex.Choose sync.Map when your use case matches its design (concurrent, read-heavy, keys written infrequently). For general-purpose concurrent map access, a regular map with a sync.RWMutex or sync.Mutex is often simpler and sufficient, or even faster depending on the access pattern.`,
+    question: 'What is an interface in Go, and how does a type implement it?',
+    answer:
+      'An interface is a collection of method signatures. A type implicitly implements an interface if it defines all the methods declared in the interface, regardless of whether it explicitly declares it implements the interface. This is known as structural typing or duck typing.',
   },
   {
-    question: `What is the role of the net/context (now context) package?`,
-    answer: `The context package (context was moved from golang.org/x/net/context to the standard library in Go 1.7) is used to carry request-scoped values, cancellation signals, and deadlines across API boundaries, typically between goroutines in concurrent programs (like handling incoming requests in a server).It allows you to build cancelable and timeout-aware operations, ensuring that resources are released and goroutines are stopped when they are no longer needed (e.g., when a client disconnects or a request times out). Functions that need context-awareness should accept a context.Context as their first argument.`,
+    question:
+      'Explain embedding in structs and how it relates to interfaces or code reuse.',
+    answer:
+      "Embedding involves including a type (typically a struct or an interface) as an anonymous field within another struct. The methods and fields of the embedded type are 'promoted' to the outer struct. For interfaces, embedding is used to compose interfaces, combining multiple interface method sets into a new interface. For structs, it provides a form of composition and code reuse where the outer struct 'has-a' or 'is-a' relationship with the embedded type, promoting its fields and methods.",
   },
   {
-    question: `How would you implement a graceful shutdown of an HTTP server in Go?`,
-    answer: `Graceful shutdown allows an HTTP server to stop accepting new connections but continue serving existing ones until they complete, preventing abrupt interruption of ongoing requests.1.  Listen for Signals: Use os/signal to listen for termination signals (SIGINT, SIGTERM).2.  Create a context.Context: Use context.WithCancel or context.WithTimeout.3.  Start Server in Goroutine: Run http.Server.ListenAndServe or ListenAndServeTLS in a separate goroutine.4.  Block on Signal Channel: The main goroutine blocks until a signal is received.5.  Call Shutdown(): When a signal is received, call http.Server.Shutdown(ctx). The Shutdown method stops the server from accepting new connections, closes idle connections, and waits for active connections to finish (respecting the context's deadline/cancellation).6.  Wait for Server Goroutine: Use sync.WaitGroup or listen on a channel to know when the server's ListenAndServe goroutine exits (it returns http.ErrServerClosed after Shutdown is called).`,
+    question:
+      'Explain the difference between value and pointer receivers for methods.',
+    answer:
+      'A method with a value receiver (`func (t MyType) myMethod()`) operates on a copy of the value. Changes made to `t` inside the method are not reflected in the original variable. A method with a pointer receiver (`func (t *MyType) myMethod()`) operates on the original value through its pointer. Changes made to `t` inside the method modify the original variable. Pointer receivers are also necessary for methods that modify the receiver or when the receiver is large to avoid copying overhead.',
   },
   {
-    question: `What are generics in Go (introduced in Go 1.18)?`,
-    answer: `Generics allow you to write functions and types that work with multiple types without requiring the use of the empty interface (interface{}) and reflection. They enable code reuse while maintaining type safety.You define type parameters in square brackets [] after the function name or type name. These type parameters can have constraints (comparable, any, or custom interfaces) that specify which types are allowed to be used as arguments for the type parameter.Example:\`\`\`gofunc Map[T, U any](s []T, f func(T) U) []U {    result := make([]U, len(s))    for i, v := range s {        result[i] = f(v)    }    return result}\`\`\`Here, T and U are type parameters. any is a constraint meaning any type is allowed.`,
+    question:
+      'Explain method sets for concrete types and pointer types regarding interface implementation.',
+    answer:
+      "For a concrete type `T`, its method set consists of all methods with a value receiver `(T)`. For a pointer type `*T`, its method set includes all methods with a value receiver `(T)` AND all methods with a pointer receiver `(*T)`. A type implements an interface if its method set is a superset of the interface's method set. This is why a concrete value `T` cannot implement an interface requiring a method with a pointer receiver `(*T)`, but a pointer value `*T` can implement interfaces requiring either receiver type.",
   },
   {
-    question: `How do you perform profiling in Go?`,
-    answer: `Go has excellent built-in profiling tools via the pprof package (runtime/pprof and net/http/pprof).1.  For Web Servers: Import net/http/pprof. This registers handlers at /debug/pprof which provide CPU, heap, goroutine, block, and mutex profiles.2.  For Command-Line Apps/Batch Jobs: Use runtime/pprof to manually start and stop CPU profiling (pprof.StartCPUProfile, pprof.StopCPUProfile) or write heap profiles (pprof.WriteHeapProfile).3.  Analyze Profiles: Use the go tool pprof command with the profile data (either the file or the URL for web servers) to analyze performance, view call graphs, flame graphs, etc.`,
+    question:
+      'How do you use type assertion and type switches with interfaces?',
+    answer:
+      'Type assertion (`value.(Type)`) checks if an interface value holds a value of a specific concrete type and extracts it. It can return two values: the concrete value and a boolean indicating success (`v, ok := i.(T)`). A type switch (`switch v := i.(type) { ... }`) is a concise way to perform multiple type assertions on a single interface value, allowing different code branches based on the concrete type held by the interface.',
   },
   {
-    question: `Describe the concept of 'escaping' in Go.`,
-    answer: `Escape analysis is a compiler optimization. It determines whether a variable allocated on the stack "escapes" to the heap. If a variable's lifetime is longer than the function it's declared in, or if it's accessed by multiple goroutines, it must be allocated on the heap; otherwise, it can be allocated on the stack.- Stack Allocation: Faster, memory is automatically reclaimed when the function returns, less pressure on the garbage collector.- Heap Allocation: Slower (requires GC), used for variables that need to persist beyond the function call or are shared across goroutines.Go's compiler performs escape analysis automatically. You can see the results using go build -gcflags='-m'.`,
+    question: 'How does Go handle errors, and what are common patterns?',
+    answer:
+      'Go uses multiple return values, typically returning a result and an error (`(result, error)`). Callers check if the error is `nil` to determine success. Common patterns include: checking errors immediately after calls (`if err != nil { return ..., err }`), sentinel errors (specific error values like `io.EOF`), and custom error types implementing the `error` interface to carry more information.',
   },
   {
-    question: `When might you use the unsafe package?`,
-    answer: `The unsafe package allows operations that bypass Go's type safety and memory safety guarantees, such as pointer arithmetic and converting between arbitrary types and pointers.- Use Cases: Interfacing with C code (cgo), performance-critical operations where type-safe Go code is too slow, low-level system programming, working with memory-mapped files, or implementing data structures with specific memory layouts.- Drawbacks: Code using unsafe is not guaranteed to be portable, can introduce memory bugs (like use-after-free), breaks type safety, and might be brittle across different Go versions or architectures.It should be used only when absolutely necessary and with extreme caution.`,
+    question: 'Explain error wrapping (Go 1.13+) and its benefits.',
+    answer:
+      'Error wrapping allows an error to contain another error using `fmt.Errorf` with `%w` or packages like `xerrors` (now integrated). This creates a chain of errors, preserving the original error context as the error propagates up the call stack. Benefits include improved debugging (seeing the root cause) and allowing callers to inspect wrapped errors using `errors.Is` (for sentinel errors) or `errors.As` (for specific error types) without needing to know the full wrapping chain.',
   },
   {
-    question: `Explain method sets in Go.`,
-    answer: `A method set is the collection of methods associated with a type. It determines which interfaces a type implements.- For a value type T: The method set consists of all methods declared with a value receiver (func (t T) Method()).- For a pointer type *T: The method set consists of all methods declared with either a value receiver (func (t T) Method()) or a pointer receiver (func (t *T) Method()).This means that if you have a value v of type T, you can only call methods with a value receiver. If you have a pointer p of type *T, you can call methods with both value and pointer receivers (the compiler will handle taking the address or dereferencing). An interface variable i can hold a value of type T only if the method set of T is a superset of the interface's methods. It can hold a value of type *T only if the method set of *T is a superset of the interface's methods.`,
+    question: 'What is the difference between `make` and `new`?',
+    answer:
+      '`new` allocates memory for a value of a given type, initializes it to its zero value, and returns a pointer to it. `make` is used for initializing slices, maps, and channels; it allocates and initializes the internal data structure and returns the value itself (not a pointer).',
   },
   {
-    question: `How does cgo work?`,
-    answer: `cgo is the mechanism that allows Go programs to call C code and C code to call Go code. It processes special comments in Go source files (import "C") that contain C code (declarations, functions, types).- Calling C from Go: cgo generates Go code that acts as a bridge to the C functions/types defined in the comments or included headers. This involves type conversions between Go and C representations.- Calling Go from C: You can export Go functions using //export FunctionName comments, and cgo will generate C-callable wrapper functions.cgo adds overhead due to the need to switch between the Go runtime stack and the C stack, type conversions, and potential synchronization issues. It also results in larger binaries and disables some Go toolchain features like cross-compilation to environments without a C compiler.`,
+    question: 'How do you handle panics?',
+    answer:
+      'Panics can be recovered from using the `recover` built-in function within a `defer`ed function. `recover` stops the panic sequence and returns the value passed to `panic()`. If `recover` is not called within a `defer`ed function or there was no panic, it returns nil.',
   },
   {
-    question: `What are Go Fuzzing tests?`,
-    answer: `Fuzzing is an automated testing technique that feeds unexpected, malformed, or random data as inputs to a program to discover bugs like crashes, panics, or security vulnerabilities.Go introduced native fuzzing support in Go 1.18 (go test -fuzz=FuzzTargetName). You write a fuzzing function starting with FuzzXxx that takes a *testing.F argument. The fuzzing engine repeatedly calls this function with new inputs derived from a corpus of seed inputs and newly generated inputs. The engine tries to generate inputs that increase code coverage or trigger interesting behavior.`,
+    question: 'When should you use `panic` and `recover`?',
+    answer:
+      "`panic` should be used for truly exceptional, unrecoverable errors or programming errors (like index out of bounds, nil pointer dereference - though the runtime often panics for these). It stops the ordinary flow of control and begins panicking. `recover` is used within a `defer`ed function to stop a panic and resume normal execution. It's typically used for gracefully handling runtime errors that might otherwise crash the program, such as recovering from a bad state in a server request handler.",
   },
   {
-    question: `Explain the difference between panic and error.`,
-    answer: `- error: Represents anticipated or expected failures that are part of a function's normal control flow. Functions return an error value (often nil for success) to signal a problem. Callers are expected to check for and handle these errors explicitly.- panic: Indicates truly exceptional, unexpected, and often unrecoverable runtime errors (like accessing an index out of bounds, nil pointer dereference, or intentional panic() calls for critical failures). A panic stops the normal execution flow, unwinds the stack, and runs deferred functions. If not recovered (using recover() in a deferred function), it crashes the program.Errors are for expected problems you should handle; panics are for unexpected, catastrophic failures that usually indicate a programming bug or an unrecoverable system state.`,
+    question: 'What is the purpose of the `defer` statement? Give an example.',
+    answer:
+      "The `defer` statement schedules a function call to be executed just before the surrounding function returns. Deferred calls are executed in LIFO order. It's commonly used for cleanup tasks like closing file handles, database connections, unlocking mutexes, or recovering from panics.\nExample:\n```go\nfunc readFile(filename string) ([]byte, error) {\n    f, err := os.Open(filename)\n    if err != nil {\n        return nil, err\n    }\n    defer f.Close() // Ensure the file is closed\n    data, err := ioutil.ReadAll(f)\n    return data, err\n}\n```",
   },
   {
-    question: `What is a Goroutine Leak? How can you cause or prevent one?`,
-    answer: `A goroutine leak occurs when a goroutine is started but never finishes execution, often because it's blocked indefinitely waiting for a resource (like a channel operation or a lock) that will never become available.- Causes:  - Sending to a channel that no one is receiving from.  - Receiving from a channel that no one is sending to.  - Blocking on a mutex that is never unlocked.  - Waiting on a sync.WaitGroup where Done() is not called the correct number of times.- Prevention:  - Use select with timeouts or default cases: Prevent indefinite blocking on channels.  - Ensure channels are closed: Signal to receivers that no more data is coming.  - Use context with cancellation/deadlines: Propagate cancellation signals to goroutines so they can exit gracefully.  - Careful Channel Design: Ensure every send has a potential receiver and vice-versa, or use buffered channels appropriately.  - Profile: Use go tool pprof with the goroutine profile (/debug/pprof/goroutine) to inspect running goroutines and identify blocked ones.`,
+    question: 'Explain the concept of zero values and `nil` in Go.',
+    answer:
+      "Variables in Go are automatically initialized to their 'zero value' if not explicitly assigned. This is `0` for numeric types, `false` for booleans, `''` for strings, and `nil` for pointers, slices, maps, channels, interfaces, and functions. `nil` specifically represents the absence of a value or an uninitialized state for these reference/pointer types. Accessing methods or elements on a `nil` pointer, slice, map, or channel often results in a panic, making understanding and handling `nil` crucial.",
   },
   {
-    question: `How do you manage configuration in a Go application?`,
-    answer: `Common strategies for managing configuration include:- Environment Variables: Standard practice, especially for cloud-native applications (12-factor app). Simple and widely supported.- Configuration Files: Using formats like JSON, YAML, TOML, or .env. Libraries like viper, koanf, or simple encoding/json/gopkg.in/yaml.v2 can parse these.- Command-Line Flags: Using the flag package or third-party libraries like cobra or urfave/cli.- Configuration Services: Using external services like Consul, etcd, ZooKeeper, or cloud-specific configuration managers.Often, a combination is used, with environment variables or flags overriding values from config files.`,
+    question: 'What is the `context` package used for?',
+    answer:
+      'The `context` package provides types (`Context`) for carrying deadlines, cancellation signals, and request-scoped values across API boundaries, typically between goroutines in a call chain (e.g., handling an incoming HTTP request, propagating cancellation to database queries or microservice calls). It is essential for managing the lifecycle of operations, especially in concurrent or distributed systems, allowing graceful cancellation and timeout enforcement.',
   },
   {
-    question: `What is the difference between concurrency and parallelism again?`,
-    answer: `- Concurrency: The ability to deal with multiple things at once. It's a way of structuring a program as independently executing components (like goroutines) that can be interleaved on a single processor or run simultaneously on multiple processors. Focuses on structure and composition.- Parallelism: The ability to do multiple things at the same time. It's about the execution of multiple computations simultaneously, requiring multiple processing units (cores). Focuses on execution and throughput.A concurrent program may or may not run in parallel, depending on the available hardware and the Go runtime's scheduler. A parallel program is inherently concurrent in its structure (multiple parts running at once).`,
+    question:
+      'How do you handle context cancellation in concurrent operations?',
+    answer:
+      'You pass a `context.Context` (often derived from an incoming request or a parent context) to goroutines or functions that perform work. Inside these goroutines/functions, you select on `context.Done()` alongside other operations (like channel reads). When `context.Done()` receives a signal, it indicates the operation should be cancelled, and the goroutine should clean up and exit. This propagates cancellation through the system.',
   },
   {
-    question: `Explain the concept of 'channels are first-class citizens' in Go.`,
-    answer: `This means channels are not merely compiler primitives but can be treated like any other value in Go. They can be:- Assigned to variables.- Passed as arguments to functions.- Returned from functions.- Stored in data structures (slices, maps, structs).- Sent and received on other channels.This capability makes channels incredibly flexible for designing complex concurrent communication and synchronization patterns.`,
+    question: 'Explain closures in Go and give an example.',
+    answer:
+      "A closure is a function value that references variables from outside its body. It 'closes over' variables in its surrounding scope, allowing the function to access and manipulate those variables even after the outer function has returned. They are often used for creating functions with persistent state or within goroutines.\nExample:\n```go\nfunc counter() func() int {\n    i := 0\n    return func() int { // This is the closure\n        i++\n        return i\n    }\n}\n\nfunc main() {\n    c := counter()\n    fmt.Println(c()) // Output: 1\n    fmt.Println(c()) // Output: 2\n}\n```",
   },
   {
-    question: `How does the Go scheduler work?`,
-    answer: `The Go scheduler uses a M:P:G model:- M (Machine): An OS thread.- P (Processor): A logical processor provided by the scheduler, which needs to be associated with an M to execute Goroutines.- G (Goroutine): A goroutine, representing a concurrent function execution.The scheduler multiplexes Gs onto Ps, and Ps are executed by Ms. When a goroutine blocks on a system call (like I/O), its M is blocked, but its P is handed off to another M, allowing other goroutines associated with that P to continue running. If a goroutine blocks on a channel or mutex, the scheduler can deschedule it and run another goroutine on the same P. This cooperative scheduling for Go's internal blocking points (channels, mutexes) combined with the hand-off mechanism for syscall blocking allows the scheduler to keep OS threads busy and efficiently manage a large number of goroutines.`,
+    question: 'What is the purpose of the `init` function?',
+    answer:
+      "The `init` function is a special function (no arguments, no return value, automatically executed) that runs during package initialization, before the `main` function. A package can have multiple `init` functions (in potentially multiple files). They are used for setting up package-specific state, registering components, or performing other necessary initialization tasks before the package's contents are used.",
   },
   {
-    question: `What are Go plugins? What are their limitations?`,
-    answer: `Go plugins (using the plugin package) allow you to build a Go program that can load and link code (plugins) at runtime. Plugins must be built specifically with the plugin build mode (go build -buildmode=plugin).- Use Cases: Implementing dynamic loading of modules, implementing plugin architectures, or providing extensibility for applications.- Limitations:  - Platform Support: Primarily works on Linux and macOS (less stable/supported on Windows).  - Go Version Compatibility: The plugin and the main program must be built with the exact same Go compiler version.  - Dependency Conflicts: Can be tricky if the plugin and main program have conflicting dependencies or versions.  - Type Identity: Types in the plugin are distinct from types in the main program, even if they have the same name and structure (unless passed via interfaces or serialized/deserialized).`,
+    question:
+      'Why does the Go compiler enforce that local variables must be used?',
+    answer:
+      'The Go compiler enforces that declared local variables must be used to prevent code bloat and potential bugs. Unused variables can clutter code, indicate logic errors (e.g., a computation result was ignored), and make code harder to read and maintain. This compiler check encourages cleaner and more intentional code.',
   },
   {
-    question: `Explain Tail Call Optimization (TCO) in Go.`,
-    answer: `Go's compiler does not guarantee Tail Call Optimization (TCO). TCO is a compiler optimization where a function call at the very end of another function (a tail call) can sometimes be executed without allocating a new stack frame, potentially preventing stack overflow errors in deeply recursive functions.Because Go's scheduler manages goroutine stacks, which can grow and shrink, and because of the need to integrate with C code and support features like reflection and garbage collection stack scanning, implementing a general-purpose TCO is complex and not prioritized. Deep recursion is generally discouraged in favor of iterative solutions or explicit stack management if necessary.`,
+    question:
+      'What is a Go module and how does it relate to dependency management?',
+    answer:
+      "A Go module is the unit of source code versioning and dependency management in Go. It's a collection of related Go packages that are versioned together. The `go.mod` file defines the module path, required dependencies, and their versions. The `go.sum` file records cryptographic checksums of module dependencies. The `go mod` command-line tool is used to manage these dependencies.",
   },
   {
-    question: `How would you design a simple in-memory cache with expiration in Go?`,
-    answer: `A simple design could involve:1.  A map[string]CacheItem: To store the cached data, where CacheItem is a struct containing the value and an expiration timestamp.2.  A sync.RWMutex: To protect the map for concurrent access.3.  Expiration Timestamp: Each CacheItem stores time.Time indicating when it expires.4.  Get Operation: Acquire read lock, check if key exists, check if item is expired. If expired, acquire write lock (or upgrade lock if RWMutex supports it, Go's doesn't), delete item, release lock, return not found. Otherwise, release read lock, return value.5.  Set Operation: Acquire write lock, store or update the item with value and expiration. Release write lock.6.  Cleanup Goroutine: A separate goroutine that periodically (e.g., every minute) acquires a write lock, iterates through the map, and deletes expired items. This prevents the cache from growing indefinitely with stale data. Alternatively, cleanup can happen lazily during Get/Set operations.`,
+    question: 'How do you manage dependencies in Go using Go Modules?',
+    answer:
+      'Dependencies are managed using the `go mod` command. `go mod init` initializes a new module. `go get` adds, upgrades, or downgrades dependencies. `go mod tidy` cleans up the `go.mod` file by removing unused dependencies and adding missing ones. `go build` and `go test` automatically use the `go.mod` file to resolve and fetch dependencies.',
+  },
+  {
+    question:
+      'How do you read from and write to files in Go, ensuring resources are properly closed?',
+    answer:
+      'File operations are typically done using the `os` package. `os.Open` or `os.OpenFile` opens a file. `file.Read` or functions from `io` are used for reading; `file.Write` or functions from `io` are used for writing. To ensure the file is closed even if errors occur, you use `defer file.Close()` immediately after successfully opening the file. This guarantees the file handle is released when the surrounding function exits.',
+  },
+  {
+    question:
+      'What are some common pitfalls when working with shared data (like maps or slices) concurrently without synchronization?',
+    answer:
+      'Accessing maps or slices concurrently for writing (or even reading if writes are also happening) without proper synchronization (like a `sync.Mutex` or using channels) leads to race conditions. This can result in data corruption, unpredictable behavior, or even runtime panics (especially with maps). Maps in Go are explicitly not safe for concurrent writes or reads/writes.',
+  },
+  {
+    question:
+      'What are some general best practices you follow when writing Go code?',
+    answer:
+      "Common best practices include: Explicit error handling (checking `err != nil`), using interfaces for decoupling and flexibility, writing idiomatic Go code (following `go fmt` and Go's conventions), using `defer` for resource cleanup, using `context` for cancellation and timeouts, designing with concurrency in mind (goroutines, channels, sync primitives), writing comprehensive unit tests, using the race detector, minimizing global state, and documenting public API elements.",
+  },
+  {
+    question: 'How do you write unit tests in Go?',
+    answer:
+      'Unit tests are written in files ending with `_test.go` in the same package as the code being tested. Test functions must start with `Test` followed by a capital letter (e.g., `TestFunctionName`), take a single argument of type `*testing.T`, and use methods on `*testing.T` like `t.Error`, `t.Errorf`, `t.Fail`, `t.Fatal`, `t.Fatalf` to report failures or stop the test.',
+  },
+  {
+    question:
+      'What is the `go test` command used for, and what are some useful flags?',
+    answer:
+      '`go test` is the command-line tool used to run tests, examples, and benchmarks in Go packages. Useful flags include: `-v` (verbose output, showing test names and results), `-race` (enable the race detector), `-cover` (enable test coverage analysis), `-bench .` (run benchmarks), `-run <regex>` (run tests whose names match the regex), `-count n` (run tests n times to check for flakiness).',
+  },
+  {
+    question: "Explain 'testable examples' and their benefit.",
+    answer:
+      'Example functions (`func Example...`) placed in `_test.go` files serve as executable documentation. They demonstrate how to use a package, function, or type. The `go test` command runs these examples, and if the function contains an `// Output:` comment line, the actual output is compared against the text following that comment. This ensures that the examples are correct and remain up-to-date with the code, improving documentation reliability.',
+  },
+  {
+    question:
+      'Briefly explain the purpose of key Go toolchain commands (`go fmt`, `go vet`, `go run`, `go build`, `go install`).',
+    answer:
+      '`go fmt`: Formats Go source code according to standard Go style.\n`go vet`: Examines Go source code and reports suspicious constructs (potential bugs).\n`go run`: Compiles and runs a Go program.\n`go build`: Compiles Go packages and their dependencies.\n`go install`: Compiles and installs packages and dependencies, placing the executable or package archives in the appropriate location (`GOPATH/bin` or `GOBIN`).',
+  },
+  {
+    question:
+      'How would you profile a Go application for performance bottlenecks?',
+    answer:
+      'Go has built-in profiling capabilities via the `runtime/pprof` package and the `net/http/pprof` package (for web servers). You can capture CPU profiles (`pprof.StartCPUProfile`, `pprof.StopCPUProfile`), memory profiles (`pprof.WriteHeapProfile`), blocking profiles, mutex profiles, etc. The collected profile data can then be analyzed using the `go tool pprof` command, which provides various views (text, graphical, web UI) to identify hotspots.',
+  },
+  {
+    question:
+      'What is the Go Garbage Collector and how does it impact performance?',
+    answer:
+      'Go uses a concurrent, tri-color mark-and-sweep garbage collector. It automatically reclaims memory that is no longer reachable. The GC runs concurrently with the application, minimizing stop-the-world pauses. While highly efficient, GC cycles still consume CPU resources. Excessive memory allocation (churn) or complex data structures can increase GC pressure and pause times, impacting application performance, especially latency.',
   },
 ];

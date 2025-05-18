@@ -1,9 +1,11 @@
 import { behavior } from './behavior';
 import { golang } from './golang';
+import { python } from './python';
 
 export const faq = {
   behavior,
   golang,
+  python,
 };
 
 export const links = [
@@ -18,5 +20,9 @@ export const links = [
   {
     label: 'Python',
     href: '/interview-qa/python',
+  },
+  {
+    label: 'C#',
+    href: '/interview-qa/csharp',
   },
 ];

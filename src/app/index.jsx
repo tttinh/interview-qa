@@ -4,6 +4,7 @@ import NotFoundRoute from '@/app/routes/not-found';
 import GolangRoute from './routes/golang';
 import PythonRoute from './routes/python';
 import LandingRoute from './routes/landing';
+import CSharp from './routes/c-sharp';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
             <Route path="behavior" element={<BehaviorRoute />} />
             <Route path="golang" element={<GolangRoute />} />
             <Route path="python" element={<PythonRoute />} />
+            <Route path="csharp" element={<CSharp />} />
           </Route>
 
           <Route path="*" element={<NotFoundRoute />} />
