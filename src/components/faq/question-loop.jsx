@@ -13,10 +13,12 @@ import {
   PackageOpen,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const QuestionLoop = ({ questions }) => {
   const [id, setID] = useState(0);
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [isAlwaysShowAnswer, setIsAlwaysShowAnswer] = useState(false);
+  const [isShowAnswer, setIsShowAnswer] = useState(false);
   const timeoutRef = useRef(null);
 
   useEffect(() => {
@@ -36,11 +38,11 @@ const QuestionLoop = ({ questions }) => {
     } else {
       content.style.maxHeight = '0';
     }
-    setShowAnswer(isShow);
+    setIsShowAnswer(isShow);
   };
 
   const handleNext = () => {
-    if (!showAnswer) {
+    if (isAlwaysShowAnswer || !isShowAnswer) {
       setID((prev) => {
         if (prev === questions.length - 1) {
           return 0;
@@ -70,7 +72,7 @@ const QuestionLoop = ({ questions }) => {
   };
 
   const handlePrevious = () => {
-    if (!showAnswer) {
+    if (isAlwaysShowAnswer || !isShowAnswer) {
       setID((prev) => {
         if (prev === 0) {
           return questions.length - 1;
@@ -99,9 +101,28 @@ const QuestionLoop = ({ questions }) => {
     }, 400);
   };
 
+  const handleCheckbox = () => {
+    setIsAlwaysShowAnswer(!isAlwaysShowAnswer);
+    handleShowHideAnswer(!isAlwaysShowAnswer);
+  };
+
   return (
     <Card>
       <CardHeader>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            checked={isAlwaysShowAnswer}
+            onCheckedChange={handleCheckbox}
+            id="showAnswerCheckbox"
+          />
+          <label
+            htmlFor="showAnswerCheckbox"
+            className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Always show answers
+          </label>
+        </div>
+
         <CardTitle className="text-sm sm:text-lg md:text-xl">
           {questions[id].question}{' '}
         </CardTitle>
@@ -122,10 +143,11 @@ const QuestionLoop = ({ questions }) => {
             Previous
           </Button>
           <Button
-            onClick={() => handleShowHideAnswer(!showAnswer)}
+            disabled={isAlwaysShowAnswer}
+            onClick={() => handleShowHideAnswer(!isShowAnswer)}
             className="w-32"
           >
-            {showAnswer ? 'Hide answer' : 'Show answer'}
+            {isShowAnswer ? 'Hide answer' : 'Show answer'}
           </Button>
           <Button onClick={handleNext} className="w-32">
             Next
@@ -136,8 +158,11 @@ const QuestionLoop = ({ questions }) => {
           <Button onClick={handlePrevious}>
             <ArrowBigLeft />
           </Button>
-          <Button onClick={() => handleShowHideAnswer(!showAnswer)}>
-            {showAnswer ? <PackageOpen /> : <Package />}
+          <Button
+            disabled={isAlwaysShowAnswer}
+            onClick={() => handleShowHideAnswer(!isShowAnswer)}
+          >
+            {isShowAnswer ? <PackageOpen /> : <Package />}
           </Button>
           <Button onClick={handleNext}>
             <ArrowBigRight />

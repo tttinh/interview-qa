@@ -8,10 +8,12 @@ import {
 } from '@/components/ui/card';
 import { DicesIcon, Package, PackageOpen } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const QuestionShuffle = ({ questions }) => {
   const [id, setID] = useState(Math.floor(Math.random() * questions.length));
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [isAlwaysShowAnswer, setIsAlwaysShowAnswer] = useState(false);
+  const [isShowAnswer, setIsShowAnswer] = useState(false);
   const timeoutRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +26,7 @@ const QuestionShuffle = ({ questions }) => {
   }, []); // Empty dependency array for cleanup on unmount
 
   const handleRandomQuestion = () => {
-    if (!showAnswer) {
+    if (isAlwaysShowAnswer || !isShowAnswer) {
       setID(Math.floor(Math.random() * questions.length));
       return;
     }
@@ -49,12 +51,30 @@ const QuestionShuffle = ({ questions }) => {
     } else {
       content.style.maxHeight = '0';
     }
-    setShowAnswer(isShow);
+    setIsShowAnswer(isShow);
+  };
+
+  const handleCheckbox = () => {
+    setIsAlwaysShowAnswer(!isAlwaysShowAnswer);
+    handleShowHideAnswer(!isAlwaysShowAnswer);
   };
 
   return (
     <Card>
       <CardHeader>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            checked={isAlwaysShowAnswer}
+            onCheckedChange={handleCheckbox}
+            id="showAnswerCheckbox"
+          />
+          <label
+            htmlFor="showAnswerCheckbox"
+            className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Always show answers
+          </label>
+        </div>
         <CardTitle className="text-sm sm:text-lg md:text-xl">
           {questions[id].question}
         </CardTitle>
@@ -72,10 +92,11 @@ const QuestionShuffle = ({ questions }) => {
       <CardFooter>
         <div className="hidden w-full justify-center gap-4 sm:flex">
           <Button
-            onClick={() => handleShowHideAnswer(!showAnswer)}
+            disabled={isAlwaysShowAnswer}
+            onClick={() => handleShowHideAnswer(!isShowAnswer)}
             className="w-32"
           >
-            {showAnswer ? 'Hide answer' : 'Show answer'}
+            {isShowAnswer ? 'Hide answer' : 'Show answer'}
           </Button>
           <Button onClick={handleRandomQuestion} className="w-32">
             Another question
@@ -83,8 +104,11 @@ const QuestionShuffle = ({ questions }) => {
         </div>
 
         <div className="flex w-full justify-center gap-4 sm:hidden">
-          <Button onClick={() => handleShowHideAnswer(!showAnswer)}>
-            {showAnswer ? <PackageOpen /> : <Package />}
+          <Button
+            disabled={isAlwaysShowAnswer}
+            onClick={() => handleShowHideAnswer(!isShowAnswer)}
+          >
+            {isShowAnswer ? <PackageOpen /> : <Package />}
           </Button>
           <Button onClick={handleRandomQuestion}>
             <DicesIcon />
