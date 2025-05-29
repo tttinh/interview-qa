@@ -1,48 +1,77 @@
 export const behavior = [
   {
     question: `Would you please tell me about yourself?`,
-    answer: `Certainly, I'd be happy to. I hold a Bachelor's
-degree in Computer Science and have spent the last six
-years working in software development. I've had the
-opportunity to work on various projects, from developing
-mobile applications to leading a team of developers in my
-previous role at XYZ Company. I'm known for my
-problem-solving skills and my ability to work
-collaboratively with cross-functional teams. Outside of
-work, I'm passionate about volunteering for coding boot
-camps, where I mentor aspiring developers.`,
+    answer: `Certainly. My name is Tom, and I am a Vietnamese software engineer. I hold a Bachelor's degree in Computer Science and have spent the last 15 years working in software development. During my career, I've had the opportunity to work on various projects and domains, including games, desktop applications, web applications, and server-side services on Linux. Later in my career, I focused on building scalable backend applications on clouds. Recently, I earned a Master's degree in New Zealand and am now looking for new opportunities to leverage my skills and experience.`,
   },
   {
     question: `Why should we hire you?`,
-    answer: `You should hire me because I bring a unique
-combination of technical expertise, leadership experience,
-and a proven track record of delivering results. In my
-previous role at ABC Inc., I not only led a team that
-completed a critical project ahead of schedule but also
-identified and implemented process improvements that
-saved the company 20% in operational costs. My ability to
-collaborate effectively and my commitment to continuous
-learning make me a valuable asset to any team.`,
+    answer: `You should hire me because I bring a unique combination of technical expertise, leadership experience, and a proven track record of delivering results. My attention to detail, strong problem-solving skills, and ability to collaborate effectively with cross-functional teams make me a strong candidate for this role. Furthermore, my commitment to continuous learning and knowledge sharing makes me a valuable asset to any team.`,
   },
   {
     question: `What's your greatest strength?`,
-    answer: `One of my greatest strengths is my adaptability.
-I thrive in dynamic work environments and have
-consistently demonstrated the ability to learn new
-technologies quickly. For example, at my previous job, I
-was asked to lead a project that involved using a
-programming language I had never worked with before.
-I immersed myself in learning it and successfully
-delivered the project on time.`,
+    answer: `One of my greatest strengths is my adaptability. I thrive in dynamic work environments and have consistently demonstrated the ability to learn new technologies quickly. On many occasions, I was asked to lead projects that required using programming languages, frameworks, and technologies I had never worked with before. I immersed myself in learning them and successfully delivered multiple projects on time.`,
   },
   {
     question: `What's your greatest weakness?`,
-    answer: `I used to struggle with delegating tasks, often
-taking on too much myself. However, I recognized this as
-a weakness and actively worked on improving my
-delegation skills. I now understand the importance of
-empowering team members and have seen how it
-enhances both productivity and team morale.`,
+    answer: `I used to struggle with delegating tasks, often taking on too much myself. However, I recognized this as a weakness and actively worked to improve my delegation skills. I now understand the importance of empowering team members and have seen how effective delegation enhances both productivity and morale within the team.`,
+  },
+  {
+    question: `Where do you see yourself in 5 years?`,
+    answer: `In five years, I see myself in a leadership role within the company, possibly as an engineering manager or a principal software engineer. I'm dedicated to continuous growth and would like to leverage my experience to mentor and lead teams to success while contributing to the company's long-term goals.`,
+  },
+  {
+    question: `Why did you leave your last job?`,
+    answer: `I left my last job because I felt I had outgrown the opportunities it offered. I was seeking new challenges and a role that aligned more closely with my career goals. I wanted to contribute my skills and expertise to a company where I could make a more significant impact, which is why I'm excited about the opportunity with your organization.`,
+  },
+  {
+    question: `How do you handle stress or pressure?`,
+    answer: `I handle stress and pressure by staying organized and breaking down tasks into manageable steps. I also prioritize effectively and maintain open communication with my team to ensure everyone is aligned and informed. Additionally, I maintain a healthy lifestyle I make it a point to take short breaks to recharge.`,
+  },
+  {
+    question: `What motivates you in your career?`,
+    answer: `What motivates me is the opportunity to continually learn and grow professionally. I thrive when I can tackle new challenges and expand my skill set. Additionally, I am motivated by knowing that my work contributes to the success of the team and the company as a whole.`,
+  },
+  {
+    question: `What is your preferred work style: working independently
+or in a team?`,
+    answer: `I value both working independently and collaborating with a team. Independent work allows me to focus and execute tasks efficiently, while teamwork fosters creativity and brings in diverse perspectives. My approach depends on the project’s requirements, and I am adaptable in both scenarios.`,
+  },
+  {
+    question: `How do you handle constructive criticism?`,
+    answer: `I welcome constructive criticism as an opportunity for growth. When I receive feedback, I actively listen, ask clarifying questions, and express gratitude for the input. I then reflect on the feedback and apply it to improve my performance. I believe that feedback like this has helped me become better at my job.`,
+  },
+  {
+    question: `How do you handle ambiguity and uncertainty in a project?`,
+    answer: `I handle ambiguous situations by breaking down complex problems into manageable tasks. I also conduct thorough research and consult with team members to gather insights and make informed decisions. My ability to adapt and remain calm under uncertainty has helped me successfully navigate challenging projects.`,
+  },
+  {
+    question: `Can you describe a situation where you had to persuade a team to
+adopt your idea?`,
+    answer: `In a previous role, I proposed adopting the TDD (Test-Driven Development) method to improve efficiency. To persuade the team, I conducted research to highlight its benefits, presented a clear implementation plan, and encouraged team members to share their input. By addressing concerns and demonstrating the positive impact, we ultimately gained unanimous support for the change.`,
+  },
+  {
+    question: `How do you prioritize tasks when you have multiple
+deadlines?`,
+    answer: `I prioritize tasks by assessing their urgency and importance. I create a task list, set deadlines, and break down larger projects into smaller, manageable steps. Effective time management, delegating when possible, and regular progress checks help me ensure that all deadlines are met.`,
+  },
+  {
+    question: `How do you stay updated with industry trends and
+developments?`,
+    answer: `I stay updated with industry trends by subscribing to industry-specific channels, participating in webinars and conferences, and actively engaging with professional networks and forums. Additionally, I make it a priority to seek out online courses and certifications to continually enhance my skills and knowledge.`,
+  },
+  {
+    question: `Can you describe a project where you had to meet tight deadlines.
+How did you manage it?`,
+    answer: `I encountered a project where we faced an unexpectedly tight deadline due to a client’s urgent request. To meet the deadline, I implemented a structured project plan, allocated tasks based on team members’ strengths, and closely monitored our progress. We also maintained open communication with the client, managing expectations and ultimately delivering the project on time.`,
+  },
+  {
+    question: `How do you handle failure or setbacks in a project?`,
+    answer: `I view failure or setbacks as opportunities for learning and improvement. When faced with setbacks, I conduct a thorough analysis to identify the root causes and develop corrective action plans. This proactive approach helps me not only address immediate issues but also prevent similar problems from occurring in the future.`,
+  },
+  {
+    question: `How do you handle a situation where you disagree with
+your supervisor's decision?`,
+    answer: `When I disagree with a supervisor's decision, I handle the situation with respect and professionalism. I first seek clarification to better understand their perspective. Then, I share my viewpoint, providing supporting evidence, and suggest alternative solutions when appropriate. Ultimately, I respect their final decision and remain committed to working collaboratively.`,
   },
   {
     question: `Can you describe a challenging situation you faced at work
@@ -58,25 +87,6 @@ members' strengths, we not only met the deadline but also
 improved team dynamics.`,
   },
   {
-    question: `Where do you see yourself in 5 years?`,
-    answer: `In five years, I see myself in a leadership role
-within the company, possibly in a senior project
-management position. I'm dedicated to continuous
-growth and would like to leverage my experience to
-mentor and lead teams to success while contributing to
-the company's long-term goals.`,
-  },
-  {
-    question: `Why did you leave your last job?`,
-    answer: `I left my last job because I felt that I had outgrown
-the opportunities it offered. I was seeking new challenges
-and a role that aligned better with my career goals. I
-wanted to contribute my skills and expertise to a company
-where I could make a more significant impact, which is
-why I'm excited about the opportunity with your
-organization.`,
-  },
-  {
     question: `Can you tell me about a time you failed and what you learned from
 it?`,
     answer: `One notable failure occurred when I was
@@ -87,16 +97,6 @@ with stakeholders, and devised a cost-cutting plan. This
 experience taught me the importance of thorough risk
 assessment and proactive problem-solving, skills I've
 since honed to prevent similar issues in the future.`,
-  },
-  {
-    question: `How do you handle stress or pressure?`,
-    answer: `I handle stress and pressure by first staying
-organized and breaking down tasks into manageable
-steps. I also prioritize effectively and maintain open
-communication with my team to ensure everyone is
-aligned and informed. Additionally, I make it a point to
-take short breaks to recharge and maintain a healthy
-work-life balance.`,
   },
   {
     question: `Can you describe a situation where you had to work with a difficult
@@ -118,17 +118,6 @@ their areas of expertise while providing clear guidance
 and support. I also emphasize setting measurable goals
 and regularly checking progress to ensure we stay on
 track.`,
-  },
-  {
-    question: `How do you stay updated with industry trends and
-developments?`,
-    answer: `I stay updated with industry trends by
-subscribing to industry-specific publications,
-participating in webinars and conferences, and actively
-engaging with professional networks and forums.
-Additionally, I make it a priority to seek out online
-courses and certifications to continually enhance my skills
-and knowledge.`,
   },
   {
     question: `What do you know about our company?`,
@@ -163,47 +152,6 @@ improve the process. As a result, our team adapted
 quickly, and the transition was remarkably smooth.`,
   },
   {
-    question: `What motivates you in your career?`,
-    answer: `What motivates me is the opportunity to
-continually learn and grow professionally. I thrive when I
-can tackle new challenges and expand my skill set.
-Additionally, I find great motivation in knowing that my
-work contributes to the success of the team and the
-company as a whole.`,
-  },
-  {
-    question: `Can you describe a project where you had to meet tight deadlines.
-How did you manage it?`,
-    answer: `I encountered a project where we had an
-unexpectedly tight deadline due to a client's urgent
-request. To meet the deadline, I implemented a structured
-project plan, allocated tasks based on team members'
-strengths, and closely monitored progress. We also
-maintained open communication with the client,
-managing expectations and delivering the project on
-time.`,
-  },
-  {
-    question: `What is your preferred work style: working independently
-or in a team?`,
-    answer: `I value both working independently and
-collaborating with a team. I find that independent work
-allows me to focus and execute tasks efficiently, while
-teamwork fosters creativity and diverse perspectives. My
-approach depends on the project's requirements, and I'm
-adaptable in both scenarios.`,
-  },
-  {
-    question: `How do you handle constructive criticism?`,
-    answer: `I welcome constructive criticism as an
-opportunity for growth. When receiving feedback, I
-actively listen, ask clarifying questions, and express
-gratitude for the input. I then take the feedback to heart
-and use it to improve my performance. Constructive
-criticism has been instrumental in my professional
-development.`,
-  },
-  {
     question: `Can you discuss a time you had to resolve a customer's
 complaint or issue?`,
     answer: `Certainly. In my previous role as a customer
@@ -213,38 +161,6 @@ with their frustration, actively listened to their concerns,
 and offered a solution that exceeded their expectations.
 The customer ultimately became a loyal advocate for our
 brand.`,
-  },
-  {
-    question: `How do you handle ambiguity and uncertainty in a project?`,
-    answer: `I thrive in ambiguous situations by breaking
-down complex problems into manageable tasks. I also
-engage in thorough research and consultation with team
-members to gather insights and make informed decisions.
-
-My ability to adapt and remain calm under uncertainty
-has allowed me to successfully navigate challenging
-projects.`,
-  },
-  {
-    question: `Can you describe a situation where you had to persuade a team to
-adopt your idea?`,
-    answer: `In a previous role, I proposed a new project
-management software to improve efficiency. To persuade
-the team, I conducted research to highlight the benefits,
-presented a clear implementation plan, and invited team
-members to share their input. By addressing concerns and
-demonstrating the positive impact, we gained unanimous
-support for the change.`,
-  },
-  {
-    question: `How do you prioritize tasks when you have multiple
-deadlines?`,
-    answer: `I prioritize tasks by assessing their urgency and
-importance. I create a task list, assign deadlines, and break
-down larger projects into smaller, manageable steps.
-Effective time management, delegation when possible,
-and regular progress checks help me ensure all deadlines
-are met.`,
   },
   {
     question: `Can you discuss a situation where you had to make a
@@ -289,15 +205,6 @@ concerns, and took swift action to address their issues. By
 exceeding their expectations and providing exceptional
 service, we not only retained the client but also received
 positive referrals.`,
-  },
-  {
-    question: `How do you handle failure or setbacks in a project?`,
-    answer: `I view failure or setbacks as opportunities for
-learning and improvement. When faced with setbacks, I
-conduct a thorough analysis to identify the root causes
-and develop corrective action plans. This proactive
-approach ensures that I not only address immediate issues
-but also prevent similar problems in the future.`,
   },
   {
     question: `What role do ethics and integrity play in your work?`,
@@ -358,16 +265,6 @@ conducted thorough research, identified mutually
 beneficial terms, and engaged in open and transparent
 communication. We successfully closed the deal, and both
 parties were satisfied with the outcome.`,
-  },
-  {
-    question: `How do you handle a situation where you disagree with
-your supervisor's decision?`,
-    answer: `When I disagree with a supervisor's decision, I
-approach the situation with respect and professionalism.
-I seek clarification to understand their perspective, share
-my viewpoint with supporting evidence, and propose
-alternative solutions if applicable. Ultimately, I respect
-their final decision and continue to work collaboratively.`,
   },
   {
     question: `Can you describe a time you had to adapt to a new software
